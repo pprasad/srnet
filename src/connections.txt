@@ -1,0 +1,36 @@
+/*var pool=mysql.createPool({
+     connectionLimit : 100, //important
+    host     : 'db4free.net',
+    user     : 'srnet1234',
+    password : 'srnet1234',
+    database : 'srnet',
+    debug    :  false
+ });
+ pool.getConnection(function(err,connection){
+    console.log('connected as id ' + connection.threadId);
+ })*/
+
+ C:\Users\umprasad\srnet
+
+ console.info("user"+JSON.stringify(user.value));
+        let body = JSON.stringify(user.value);
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        /*return this.http.post(USER_AUTH_URL, body)
+            .map(res => console.info(res.json()))
+            .catch(this.handleError);*/
+        //return this.http.post("http://localhost/userverify",JSON.stringify({"userName":"demo"}));
+        this.http.get(USER_AUTH_URL).map(res=>{console.info(res.json())}).catch(this.handleError);
+
+        /*  global.connection.connect(function(err){
+        if(!err) {
+            console.log("Database is connected ... \n\n");  
+           /* var sql="CREATE TABLE ITEM_MASTER(ITEM_ID int NOT NULL AUTO_INCREMENT,ITEM_NAME varchar(5000),PRIMARY KEY (ITEM_ID))";
+            global.connection.query(sql,this.callback);
+            sql="CREATE TABLE USER_LOGIN(USER_ID int NOT NULL AUTO_INCREMENT,USER_NAME varchar(500),USER_PWD varchar(500),PRIMARY KEY(USER_ID))";
+            global.connection.query(sql,this.callback);*/
+        }else {
+            console.log("Error connecting database ... \n\n");  
+        }
+       
+    });*/

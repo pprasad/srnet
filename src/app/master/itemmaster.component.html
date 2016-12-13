@@ -1,0 +1,46 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+      <h1 class="panel-title">ItemMaster</h1>
+  </div>
+  <div class="panel-body">
+	  <div class="alert alert-warning"><strong>Warning!</strong>{{errorMsg}}</div>
+	  <form [formGroup]="itemMasterForm" (ngSubmit)="save(itemMasterForm)" class="form-horizontal">
+			<div class="form-group">
+				<label  for="itemCode" class="col-xs-2">ItemCode</label>
+				<div class="col-xs-10">
+					<input  type="number" formControlName="itemId" class="form-control" id="itemId" placeholder="ItemId" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label  for="itemName" class="col-xs-2">ItemName</label>
+				<div class="col-xs-10">
+					<input  type="text" formControlName="itemName"  class="form-control" id="itemName" placeholder="ItemName"  />
+				</div>
+			</div>
+			<div class="form-group">
+				<label  for="itemDesc" class="col-xs-2">Description</label>
+				<div class="col-xs-10">
+					<textarea class="form-control" formControlName="itemDesc" name="itemDesc" id="itemDesc" placeholder="Your Comments"></textarea>
+				</div>
+			</div>
+			<div class="col-xs-10 col-xs-offset-2">
+				<button type="submit" class="btn btn-primary">Submit </button> 
+				<button type="reset" class="btn btn-default">Reset</button>
+			</div>
+		</form>
+	 </div>
+	  <table class="table">
+         <thead>
+            <tr>
+              <th class="col-xs-2">ItemId</th><th class="col-xs-8">ItemName</th><th class="col-xs-2">Description</th>
+            </tr>
+         </thead>
+		 <tbody>
+			<tr *ngFor="let item of itemMasters">
+				   <td class="col-xs-2">{{item.itemId}}</td> 
+				   <td class="col-xs-8">{{item.itemName}}</td> 
+				   <td class="col-xs-2">{{item.itemDesc}}</td> 
+			</tr>
+        </tbody>
+	  </table>
+</div>
