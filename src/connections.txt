@@ -34,3 +34,5 @@
         }
        
     });*/
+
+    "start": "concurrently \"npm run tsc:w\" \"node server.js\" "
