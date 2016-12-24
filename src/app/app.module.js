@@ -15,7 +15,6 @@ const http_1 = require('@angular/http');
 const common_1 = require('@angular/common');
 const app_component_1 = require('./app.component');
 const app_routers_1 = require('./app.routers');
-const my_date_picker_module_1 = require('mydatepicker/dist/my-date-picker.module');
 const timepicker_component_1 = require('./internet/timepicker.component');
 const datepicker_component_1 = require('./template/datepicker.component');
 const datatable_component_1 = require('./template/datatable.component');
@@ -23,7 +22,7 @@ let AppModule = class AppModule {
 };
 AppModule = __decorate([
     core_1.NgModule({
-        imports: [platform_browser_1.BrowserModule, http_1.HttpModule, forms_1.FormsModule, forms_1.ReactiveFormsModule, app_routers_1.app_routing.routes, my_date_picker_module_1.MyDatePickerModule],
+        imports: [platform_browser_1.BrowserModule, http_1.HttpModule, forms_1.FormsModule, forms_1.ReactiveFormsModule, app_routers_1.app_routing.routes],
         providers: [{ provide: common_1.LocationStrategy, useClass: common_1.HashLocationStrategy }],
         declarations: [app_component_1.AppComponent, app_routers_1.app_routing.components, timepicker_component_1.TimePicker, datepicker_component_1.DatepickerComponent, datatable_component_1.DataTable],
         bootstrap: [app_component_1.AppComponent]
