@@ -1,0 +1,66 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+      <h1 class="panel-title">SystemInformation</h1>
+  </div>
+  <div class="panel-body">
+	  <div class="alert alert-warning"><strong>Warning!</strong>{{errorMsg}}</div>
+	  <form  [formGroup]="systemForm"  (ngSubmit)="save(systemForm)" class="form-horizontal">
+		   <div class="form-group">
+				<label  for="userid" class="col-xs-2">User</label>
+				<div class="col-xs-4">
+					<select formControlName="userid"  id="userid" (ngChange)="onUserChanged($event)" class="form-control">
+                        <option *ngFor="let user of users" [ngValue]="user.userid">{{user.surname}}{{user.firstname}}</option>
+                    </select>
+				</div>
+			</div>
+            <div class="form-group">
+				<label  for="sysno" class="col-xs-2">System No</label>
+				<div class="col-xs-4">
+					<select formControlName="sysno" class="form-control" id="sysno" (change)="onSystemChanged($event)">
+                        <option *ngFor="let sys of systems" [ngValue]="sys">{{sys}}</option>
+                    </select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label  for="sysdate" class="col-xs-2">Date</label>
+				<div class="col-xs-4">
+					<datepicker formControlName="sysdate"></datepicker>
+				</div>
+			</div>
+			<div class="form-group">
+				<label  for="syshour" class="col-xs-2">Hours</label>
+				<div class="col-xs-4">
+					<input  type="text" formControlName="syshour" class="form-control" id="syshour" placeholder="Hours" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label  for="starttime" class="col-xs-2">SystemTime</label>
+				<div class="col-xs-2">
+				         <time-picker   formControlName="starttime" id="starttime"></time-picker>
+			    </div>
+				<div class="col-xs-2">
+				         <time-picker  formControlName="endtime" id="endtime"></time-picker>
+				</div>
+			</div>
+			<div class="form-group">
+				<label  for="syshour" class="col-xs-2">Amount</label>
+				<div class="col-xs-2">
+					<input  type="text" formControlName="amount" class="form-control" id="amount" placeholder="amount"/>
+				</div>
+				<div class="col-xs-2">
+					<input  type="text" formControlName="paidamt" class="form-control" id="paidamt" placeholder="Paid Amount"/>
+				</div>
+				<div class="col-xs-2">
+					<input  type="text" formControlName="balance" class="form-control" id="balance" placeholder="Balance"/>
+				</div>
+			</div>
+			<div class="col-xs-10 col-xs-offset-2">
+				<button type="submit" class="btn btn-primary" [disabled]='!systemForm.valid'>Submit </button> 
+				<button type="reset" class="btn btn-default">Reset</button>
+			</div>
+	  </form>
+  </div>
+  <!--Table Data-->
+  <datatable  [rows]="rows" [columns]="columns" [itemlist]="sysinfos" [iseditable]=true  (selectedRow)="callbackfn($event)"></datatable>
+  <!--End tabledata-->
+</div>              
