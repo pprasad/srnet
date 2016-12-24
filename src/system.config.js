@@ -4,13 +4,17 @@
   var map = {
     'app':                        'app', // 'dist',
     '@angular':                   'node_modules/@angular',
-    'rxjs':                       'node_modules/rxjs'
+    'rxjs':                       'node_modules/rxjs',
+    'mydatepicker':               'node_modules/mydatepicker',
+    'jquery':                     'node_modules/jquery/dist/jquery.js',
+    'timepicker':                 'node_modules/jquery-timepicker/jquery.timepicker.js' 
   };
-
   // packages tells the System loader how to load when no filename and/or no extension
   var packages = {
-    'app':                        { main: 'main.js',  defaultExtension: 'js' },
-    'rxjs':                       { defaultExtension: 'js' }
+    'app':                        { main:'main.js',  defaultExtension: 'js' },
+    'rxjs':                       { defaultExtension: 'js' },
+    'mydatepicker':               { defaultExtension: 'js' },
+    'ng2-datetime':               {defaultExtension: 'js'}
   };
 
   var ngPackageNames = [

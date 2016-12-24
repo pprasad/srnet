@@ -8,22 +8,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var MenuBarService = (function () {
-    function MenuBarService() {
+const core_1 = require('@angular/core');
+let MenuBarService = class MenuBarService {
+    constructor() {
         this.showNavBar = new core_1.EventEmitter();
     }
-    MenuBarService.prototype.routeIsChanging = function (showmenu) {
+    routeIsChanging(showmenu) {
         this.showNavBar.emit(showmenu);
-    };
-    MenuBarService.prototype.onRouteChanged = function () {
+    }
+    onRouteChanged() {
         return this.showNavBar;
-    };
-    MenuBarService = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], MenuBarService);
-    return MenuBarService;
-}());
+    }
+};
+MenuBarService = __decorate([
+    core_1.Injectable(), 
+    __metadata('design:paramtypes', [])
+], MenuBarService);
 exports.MenuBarService = MenuBarService;
 //# sourceMappingURL=service.menubar.js.map

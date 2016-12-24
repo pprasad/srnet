@@ -8,26 +8,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var platform_browser_1 = require('@angular/platform-browser');
-var forms_1 = require('@angular/forms');
-var http_1 = require('@angular/http');
-var common_1 = require('@angular/common');
-var app_component_1 = require('./app.component');
-var app_routers_1 = require('./app.routers');
-var AppModule = (function () {
-    function AppModule() {
-    }
-    AppModule = __decorate([
-        core_1.NgModule({
-            imports: [platform_browser_1.BrowserModule, http_1.HttpModule, forms_1.FormsModule, forms_1.ReactiveFormsModule, app_routers_1.app_routing.routes],
-            providers: [{ provide: common_1.LocationStrategy, useClass: common_1.HashLocationStrategy }],
-            declarations: [app_component_1.AppComponent, app_routers_1.app_routing.components],
-            bootstrap: [app_component_1.AppComponent]
-        }), 
-        __metadata('design:paramtypes', [])
-    ], AppModule);
-    return AppModule;
-}());
+const core_1 = require('@angular/core');
+const platform_browser_1 = require('@angular/platform-browser');
+const forms_1 = require('@angular/forms');
+const http_1 = require('@angular/http');
+const common_1 = require('@angular/common');
+const app_component_1 = require('./app.component');
+const app_routers_1 = require('./app.routers');
+const my_date_picker_module_1 = require('mydatepicker/dist/my-date-picker.module');
+const timepicker_component_1 = require('./internet/timepicker.component');
+const datepicker_component_1 = require('./template/datepicker.component');
+const datatable_component_1 = require('./template/datatable.component');
+let AppModule = class AppModule {
+};
+AppModule = __decorate([
+    core_1.NgModule({
+        imports: [platform_browser_1.BrowserModule, http_1.HttpModule, forms_1.FormsModule, forms_1.ReactiveFormsModule, app_routers_1.app_routing.routes, my_date_picker_module_1.MyDatePickerModule],
+        providers: [{ provide: common_1.LocationStrategy, useClass: common_1.HashLocationStrategy }],
+        declarations: [app_component_1.AppComponent, app_routers_1.app_routing.components, timepicker_component_1.TimePicker, datepicker_component_1.DatepickerComponent, datatable_component_1.DataTable],
+        bootstrap: [app_component_1.AppComponent]
+    }), 
+    __metadata('design:paramtypes', [])
+], AppModule);
 exports.AppModule = AppModule;
 //# sourceMappingURL=app.module.js.map

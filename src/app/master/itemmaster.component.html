@@ -5,10 +5,11 @@
   <div class="panel-body">
 	  <div class="alert alert-warning"><strong>Warning!</strong>{{errorMsg}}</div>
 	  <form [formGroup]="itemMasterForm" (ngSubmit)="save(itemMasterForm)" class="form-horizontal">
+		    <input  type="hidden" formControlName="itemId" /> 
 			<div class="form-group">
 				<label  for="itemCode" class="col-xs-2">ItemCode</label>
 				<div class="col-xs-10">
-					<input  type="number" formControlName="itemId" class="form-control" id="itemId" placeholder="ItemId" />
+					<input  type="text" formControlName="itemCode" class="form-control" id="itemCode" placeholder="ItemCode" />
 				</div>
 			</div>
 			<div class="form-group">
@@ -27,20 +28,8 @@
 				<button type="submit" class="btn btn-primary">Submit </button> 
 				<button type="reset" class="btn btn-default">Reset</button>
 			</div>
+	       
 		</form>
 	 </div>
-	  <table class="table">
-         <thead>
-            <tr>
-              <th class="col-xs-2">ItemId</th><th class="col-xs-8">ItemName</th><th class="col-xs-2">Description</th>
-            </tr>
-         </thead>
-		 <tbody>
-			<tr *ngFor="let item of itemMasters">
-				   <td class="col-xs-2">{{item.itemId}}</td> 
-				   <td class="col-xs-8">{{item.itemName}}</td> 
-				   <td class="col-xs-2">{{item.itemDesc}}</td> 
-			</tr>
-        </tbody>
-	  </table>
+	  <datatable  [rows]="rows" [columns]="columns" [itemlist]="itemMasters" [iseditable]=true  (selectedRow)="callbackfn($event)"></datatable>
 </div>

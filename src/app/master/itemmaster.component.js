@@ -8,38 +8,52 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var forms_1 = require('@angular/forms');
-var itemmaster_service_1 = require('../services/itemmaster.service');
-var ItemMasterComponent = (function () {
-    function ItemMasterComponent(fb, service) {
+const core_1 = require('@angular/core');
+const forms_1 = require('@angular/forms');
+const itemmaster_service_1 = require('../services/itemmaster.service');
+let ItemMasterComponent = class ItemMasterComponent {
+    constructor(fb, service) {
         this.fb = fb;
         this.service = service;
     }
-    ItemMasterComponent.prototype.ngOnInit = function () {
-        var _this = this;
+    ngOnInit() {
         this.itemMasterForm = this.fb.group({
-            itemId: ['', forms_1.Validators.required],
+            itemId: [''],
+            itemCode: ['', forms_1.Validators.required],
             itemName: ['', forms_1.Validators.required],
             itemDesc: ['', forms_1.Validators.required]
         });
-        this.service.getList().subscribe(function (resItemMaster) { return _this.itemMasters = resItemMaster; });
-    };
-    ItemMasterComponent.prototype.save = function (model) {
-        var _this = this;
+        this.rows = ['ItemId', 'ItemCode', 'ItemName', 'ItemDesc'];
+        this.columns = ['itemId', 'itemCode', 'itemName', 'itemDesc'];
+        this.updateDataTable();
+    }
+    updateDataTable() {
+        this.service.getList().subscribe(resItemMaster => this.itemMasters = resItemMaster);
+    }
+    save(model) {
         console.info("model{}" + JSON.stringify(model.value));
-        var data = JSON.stringify(model.value);
-        this.service.save(data).subscribe(function (res) { console.info(res); }, function (error) { return _this.errorMsg = error; });
-    };
-    ItemMasterComponent = __decorate([
-        core_1.Component({
-            moduleId: module.id,
-            templateUrl: 'itemmaster.component.html',
-            providers: [itemmaster_service_1.ItemMasterService]
-        }), 
-        __metadata('design:paramtypes', [forms_1.FormBuilder, itemmaster_service_1.ItemMasterService])
-    ], ItemMasterComponent);
-    return ItemMasterComponent;
-}());
+        let data = JSON.stringify(model.value);
+        this.object.itemCode = model.value.itemCode;
+        this.object.itemName = model.value.itemName;
+        this.object.itemDesc = model.value.itemDesc;
+        this.service.save(data).subscribe(res => { this.updateDataTable(); }, error => this.errorMsg = error);
+    }
+    callbackfn(event) {
+        console.info("Event{}....");
+        if (event != null) {
+            console.info("Hello.....");
+            this.object = event;
+            this.itemMasterForm.setValue({ 'itemId': event.itemId, 'itemCode': event.itemCode, 'itemName': event.itemName, "itemDesc": event.itemDesc });
+        }
+    }
+};
+ItemMasterComponent = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        templateUrl: 'itemmaster.component.html',
+        providers: [itemmaster_service_1.ItemMasterService]
+    }), 
+    __metadata('design:paramtypes', [forms_1.FormBuilder, itemmaster_service_1.ItemMasterService])
+], ItemMasterComponent);
 exports.ItemMasterComponent = ItemMasterComponent;
 //# sourceMappingURL=itemmaster.component.js.map
