@@ -16,7 +16,7 @@ export class ItemMasterComponent implements OnInit{
     totalPages:number;
     rows:any[];
     columns:any[];
-    object:any;
+    object:any=null;
     constructor(private fb:FormBuilder,private service:ItemMasterService,private menubar:MenuBarService){
         this.menubar.routeIsChanging(true);
      }
@@ -25,7 +25,7 @@ export class ItemMasterComponent implements OnInit{
             itemId:[''],
             itemCode:['',Validators.required],
             itemName:['',Validators.required],
-            itemDesc:['',Validators.required] 
+            itemDesc:[''] 
         });
          this.rows=['ItemId','ItemCode','ItemName','ItemDesc'];
          this.columns=['itemId','itemCode','itemName','itemDesc'];
@@ -35,12 +35,17 @@ export class ItemMasterComponent implements OnInit{
         this.service.getList().subscribe(resItemMaster=>this.itemMasters=resItemMaster);
     }
     save(model:ItemMaster):void{
-          console.info("model{}"+JSON.stringify(model.value));
+        try{
           let data=JSON.stringify(model.value);
-          this.object.itemCode=model.value.itemCode;
-          this.object.itemName=model.value.itemName;
-          this.object.itemDesc=model.value.itemDesc;  
+          if(this.object!=null){
+            this.object.itemCode=model.value.itemCode;
+            this.object.itemName=model.value.itemName;
+            this.object.itemDesc=model.value.itemDesc;  
+          }
           this.service.save(data).subscribe(res=>{this.updateDataTable();},error=>this.errorMsg=error);
+        }catch(e){
+            console.info("Exception{}"+e);
+        }
          
     }
     callbackfn(event:Event){

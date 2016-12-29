@@ -17,6 +17,7 @@ let ItemMasterComponent = class ItemMasterComponent {
         this.fb = fb;
         this.service = service;
         this.menubar = menubar;
+        this.object = null;
         this.menubar.routeIsChanging(true);
     }
     ngOnInit() {
@@ -24,7 +25,7 @@ let ItemMasterComponent = class ItemMasterComponent {
             itemId: [''],
             itemCode: ['', forms_1.Validators.required],
             itemName: ['', forms_1.Validators.required],
-            itemDesc: ['', forms_1.Validators.required]
+            itemDesc: ['']
         });
         this.rows = ['ItemId', 'ItemCode', 'ItemName', 'ItemDesc'];
         this.columns = ['itemId', 'itemCode', 'itemName', 'itemDesc'];
@@ -34,12 +35,18 @@ let ItemMasterComponent = class ItemMasterComponent {
         this.service.getList().subscribe(resItemMaster => this.itemMasters = resItemMaster);
     }
     save(model) {
-        console.info("model{}" + JSON.stringify(model.value));
-        let data = JSON.stringify(model.value);
-        this.object.itemCode = model.value.itemCode;
-        this.object.itemName = model.value.itemName;
-        this.object.itemDesc = model.value.itemDesc;
-        this.service.save(data).subscribe(res => { this.updateDataTable(); }, error => this.errorMsg = error);
+        try {
+            let data = JSON.stringify(model.value);
+            if (this.object != null) {
+                this.object.itemCode = model.value.itemCode;
+                this.object.itemName = model.value.itemName;
+                this.object.itemDesc = model.value.itemDesc;
+            }
+            this.service.save(data).subscribe(res => { this.updateDataTable(); }, error => this.errorMsg = error);
+        }
+        catch (e) {
+            console.info("Exception{}" + e);
+        }
     }
     callbackfn(event) {
         if (event != null) {
