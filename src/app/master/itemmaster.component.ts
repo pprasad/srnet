@@ -36,15 +36,15 @@ export class ItemMasterComponent implements OnInit{
     }
     save(model:ItemMaster):void{
         try{
-          let data=JSON.stringify(model.value);
-          if(this.object!=null){
-            this.object.itemCode=model.value.itemCode;
-            this.object.itemName=model.value.itemName;
-            this.object.itemDesc=model.value.itemDesc;  
-          }
-          this.service.save(data).subscribe(res=>{this.updateDataTable();},error=>this.errorMsg=error);
+             let data=JSON.stringify(model.value);
+            if(this.object!=null){
+                this.object.itemCode=model.value.itemCode;
+                this.object.itemName=model.value.itemName;
+                this.object.itemDesc=model.value.itemDesc;  
+            }
+           this.service.save(data).subscribe(res=>{this.updateDataTable();},error=>this.errorMsg=error);
         }catch(e){
-            console.info("Exception{}"+e);
+            console.info("Exception"+e);
         }
          
     }

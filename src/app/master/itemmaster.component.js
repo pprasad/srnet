@@ -45,7 +45,7 @@ let ItemMasterComponent = class ItemMasterComponent {
             this.service.save(data).subscribe(res => { this.updateDataTable(); }, error => this.errorMsg = error);
         }
         catch (e) {
-            console.info("Exception{}" + e);
+            console.info("Exception" + e);
         }
     }
     callbackfn(event) {
