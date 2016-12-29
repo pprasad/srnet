@@ -1,4 +1,5 @@
 var express = require('express');
+var dateFormat = require('dateformat');
 var http = require('http');
 var path = require('path');
 var app = express();
@@ -7,6 +8,8 @@ var bodyParser = require('body-parser');
 var mysqlConn=require('./dbconn');
 // all environments
 app.set('port',process.env.PORT ||80);
+app.set('util.date','mm/dd/yyyy');
+app.set('sql.date','yyyy-mm-dd');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));    
 app.use(cookieParser());
@@ -69,6 +72,104 @@ app.get('/api/getitemmaster',function(req,res){
           }
     });
 })
+app.get('/api/getitemcodes',function(req,res){
+     var sql="SELECT ITEM_CODE,ITEM_NAME FROM ITEM_MASTER";
+     var items=[];
+     global.client.query(sql,function(err,rows){
+           if(err) throw err;
+           else{
+             for(var row in rows){
+                  var item={};
+                  item.itemCode=rows[row].ITEM_CODE;
+                  item.itemName=rows[row].ITEM_NAME;
+                  items.push(item);
+             }
+             res.send(items);
+          }
+     });
+})
+/*Save Stock  Entry*/
+app.post('/api/save/stockentry',function(req,res){
+      var obj=req.body;
+      var sql=null;
+      var params=null;
+      if(obj.stockid==null){
+         sql="INSERT INTO STOCK_ENTRY(STOCK_DATE,ITEM_CODE,UNIT,QUANTITY,PRICE,RATE,AMOUNT) VALUES(STR_TO_DATE(?,'%m/%d/%Y'),?,?,?,?,?,?)";
+         params=[obj.stockdate,obj.itemcode,obj.stockunit,obj.itemqty,obj.itemprice,obj.itemrate,obj.totalprice];
+      }else{
+         sql="UPDATE STOCK_ENTRY SET STOCK_DATE=?,ITEM_CODE=?,UNIT=?,QUANTITY=?,PRICE=?,RATE=?,AMOUNT=? WHERE STOCK_ID=?";
+         params=[dateFormat(obj.stockdate,'yyyy-mm-dd'),obj.itemcode,obj.stockunit,obj.itemqty,obj.itemprice,obj.itemrate,obj.totalprice,obj.stockid];
+      }
+      global.client.query(sql,params,function(err,rows){
+             if(err)throw err;
+             else{
+                 updateStockQuantity(obj);
+                 res.send("Successfully Saved");
+             }
+      });
+});
+var updateStockQuantity=function(obj){
+      sql="SELECT * FROM STOCK_QUANTITY WHERE ITEM_CODE=?";
+                 global.client.query(sql,[obj.itemcode],function(err,rows){
+                       console.info("Rows{}"+rows.length);
+                       if(rows.length==0){
+                            sql="INSERT INTO STOCK_QUANTITY(ITEM_CODE,QTY,RATE) VALUES(?,?,?)";
+                            global.client.query(sql,[obj.itemcode,obj.itemqty,obj.itemrate]);
+                       }else{
+                           var qty=parseInt(rows[0].QTY);
+                           var adjqty=parseInt(obj.adjqty);
+                           var itemqty=parseInt(obj.itemqty);
+                           if(qty<itemqty){
+                               qty=(itemqty-qty)+qty;
+                           }else{
+                               qty=(qty-adjqty)+itemqty;
+                           }
+                           sql="UPDATE STOCK_QUANTITY SET QTY=?,RATE=? WHERE ITEM_CODE=?";
+                           global.client.query(sql,[qty,obj.itemrate,obj.itemcode]);
+                       }
+      });
+}
+app.get('/api/get/stockentry',function(req,res){
+     var sql="SELECT * FROM STOCK_ENTRY";
+     var stocks=[];
+     global.client.query(sql,function(err,rows){
+            if(err)res.send(err);
+            else{
+                   for(var row in rows){
+                        var stock={};
+                        stock.stockid=rows[row].STOCK_ID;
+                        stock.stockdate=dateFormat(rows[row].STOCK_DATE,"mm/dd/yyyy");
+                        stock.itemcode=rows[row].ITEM_CODE;
+                        stock.stockunit=rows[row].UNIT;
+                        stock.itemqty=rows[row].QUANTITY;
+                        stock.itemprice=rows[row].PRICE;
+                        stock.itemrate=rows[row].RATE;
+                        stock.totalprice=rows[row].AMOUNT;
+                        stocks.push(stock);
+                    }
+                    res.send(stocks);
+            }
+     });
+})
+//Get the itemcode ,itemname and  rates from the stock entry table
+app.get('/api/get/stockitemswithrate',function(req,res){
+     var sql="SELECT DISTINCT QTY.ITEM_CODE,ITM.ITEM_NAME,QTY.QTY,QTY.RATE FROM STOCK_QUANTITY QTY JOIN STOCK_ENTRY SEN ON QTY.ITEM_CODE=SEN.ITEM_CODE JOIN ITEM_MASTER ITM ON QTY.ITEM_CODE=ITM.ITEM_CODE";
+     var stocks=[];
+     global.client.query(sql,function(err,rows){
+           if(err)res.send(err);
+           else{
+               for(row in rows){
+                    var stock={};
+                    stock.code=rows[row].ITEM_CODE;
+                    stock.name=rows[row].ITEM_NAME;
+                    stock.qty=rows[row].QTY;
+                    stock.rate=rows[row].RATE;
+                    stocks.push(stock);
+               }
+               res.send(stocks);
+           }
+     })
+});
 /*Save Internet Users*/
 app.post('/api/savenetuser',function(req,res){
     var sql="INSERT INTO USER_INFO(FIRST_NAME,SUR_NAME,CONTACT_NO,ADDRESS) VALUES(?,?,?,?)";
@@ -133,6 +234,35 @@ app.get('/api/get/sysinfo',function(req,res){
               res.send(sysinfos);
            }
      })
+})
+/*generate autobillno*/
+app.get('/api/get/autobillno',function(req,res){
+   var sql="SELECT MAX(BILL_NO)+1 BILLNO FROM CUSTOMER_BILL ORDER BY BILL_NO";
+   global.client.query(sql,function(err,rows){
+        if(err)res.send(err);
+        else{
+             res.send(rows[0]);
+        }
+   })
+})
+/*Save billinformation into CUSTOMER_BILL*/
+app.post('/api/save/custbillinfo',function(req,res){
+    var obj=req.body;
+    var sql="INSERT INTO CUSTOMER_BILL VALUES(?,?,?,?)";
+    var params=[obj.billno,dateFormat(obj.billdate,app.get('sql.date')),obj.custid,obj.totalamt];
+    global.client.query(sql,params,function(err,rows){
+           if(err) res.send(err);
+           else{
+               var soildObjs=obj.stocksoild;
+               sql="INSERT INTO STOCK_SOILD(BILL_NO,ITEM_CODE,QTY,RATE,AMOUNT) VALUES(?,?,?,?,?)";
+               for(var index in soildObjs){
+                    var soild=soildObjs[index];   
+                    params=[obj.billno,soild.itemcode,soild.qty,soild.rate,soild.amount];
+                    global.client.query(sql,params);
+               }
+               res.send("Successfully Saved");
+           }
+    });
 })
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

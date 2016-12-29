@@ -1,0 +1,60 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+      <h1 class="panel-title">StockEntry</h1>
+  </div>
+  <div class="panel-body">
+	  <div class="alert alert-warning"><strong>Warning!</strong>{{errorMsg}}</div>
+	  <form  [formGroup]="stockEntryForm"  (ngSubmit)="save(stockEntryForm)" class="form-horizontal">
+          <input type="hidden" formControlName="stockid">
+          <div class="form-group">
+				<label  for="stockdate" class="col-xs-2">Stock Date</label>
+				<div class="col-xs-4">
+					<datepicker formControlName="stockdate"></datepicker>
+				</div>
+			</div>
+		   <div class="form-group">
+				<label  for="itemcode" class="col-xs-2">Stock Item</label>
+				<div class="col-xs-4">
+					<select formControlName="itemcode"  id="userid"  class="form-control">
+                        <option *ngFor="let item of  itemMasters" [ngValue]="item.itemCode">{{item.itemName}}</option>
+                    </select>
+				</div>
+			</div>
+            <div class="form-group">
+				<label  for="stockunit" class="col-xs-2">Stock Unit</label>
+				<div class="col-xs-4">
+					<select formControlName="stockunit"  id="stockunit" class="form-control">
+                        <option *ngFor="let unit of stockTypes" [ngValue]="unit.id">{{unit.value}}</option>
+                    </select>
+				</div>
+			</div>
+            <div class="form-group">
+                 <div class="row">
+                    <div class="col-xs-2">
+                        <label  for="itemqty" class="col-xs-2">Quantity</label>
+                        <input type="text" formControlName="itemqty" id="itemqty" name="itemqty" class="form-control">
+                    </div> 
+                    <div class="col-xs-2">
+                        <label  for="itemprice" class="col-xs-2">Price</label>
+                        <input type="text" formControlName="itemprice" id="itemprice" name="itemprice" class="form-control" (keyup)="onItemPriceChange($event)">
+                    </div>   
+                    <div class="col-xs-2">
+                        <label  for="itemrate" class="col-xs-2">Rate</label>
+                        <input type="text" formControlName="itemrate" id="itemrate" name="itemrate" class="form-control">
+                    </div>   
+                    <div class="col-xs-2">
+                        <label  for="totalprice" class="col-xs-2">Amount</label>
+                        <input type="text" formControlName="totalprice" id="totalprice" name="totalprice" class="form-control" disabled="disabled">
+                    </div> 
+                 </div>   
+            </div>    
+        	<div class="col-xs-10 col-xs-offset-2">
+				<button type="submit" class="btn btn-primary" [disabled]='!stockEntryForm.valid'>Submit </button> 
+				<button type="reset" class="btn btn-default">Reset</button>
+			</div>
+	  </form>
+  </div>
+  <!--Table Data-->
+  <datatable  [rows]="rows" [columns]="columns" [itemlist]="stockentrys" [iseditable]=true  (selectedRow)="callbackfn($event)"></datatable>
+  <!--End tabledata-->
+</div>              

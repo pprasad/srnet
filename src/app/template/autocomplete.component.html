@@ -1,0 +1,12 @@
+<div class="autocomplete-container">
+    <div class="autocomplete-filter-section">
+        <input type="text" [(ngModel)]=filterKey (keyup)=filter()>
+    </div>
+    <div class="suggestions" *ngIf="filteredItems.length > 0">
+        <div *ngFor="let item of filteredItems">
+            <div>
+                <a (click)="select(item)">{{item.name}}</a>
+            </div>
+        </div>
+    </div>
+</div>
