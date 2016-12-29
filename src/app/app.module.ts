@@ -8,13 +8,11 @@ import {app_routing} from './app.routers';
 import {TimePicker} from './internet/timepicker.component';
 import {DatepickerComponent} from './template/datepicker.component';
 import {DataTable} from './template/datatable.component';
-
-/*import {TimepickerModule} from 'ng2-bootstrap/ng2-bootstrap';*/
-declare var jQuery:any; 
+import {AutoComplete} from './template/autocomplete.component';
 @NgModule({
    imports:[ BrowserModule,HttpModule,FormsModule,ReactiveFormsModule,app_routing.routes],
    providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
-   declarations: [ AppComponent,app_routing.components,TimePicker,DatepickerComponent,DataTable],
+   declarations: [ AppComponent,app_routing.components,TimePicker,DatepickerComponent,DataTable,AutoComplete],
    bootstrap:    [ AppComponent ]
 })
 export class AppModule { }

@@ -9,20 +9,34 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 const core_1 = require('@angular/core');
+const router_1 = require('@angular/router');
 let MenuBarService = class MenuBarService {
-    constructor() {
+    constructor(router) {
+        this.router = router;
         this.showNavBar = new core_1.EventEmitter();
     }
     routeIsChanging(showmenu) {
-        this.showNavBar.emit(showmenu);
+        let isAuth = localStorage.getItem('profile');
+        if (isAuth != null) {
+            this.showNavBar.emit(showmenu);
+        }
+        else {
+            this.showNavBar.emit(false);
+            this.router.navigateByUrl('/');
+        }
     }
     onRouteChanged() {
         return this.showNavBar;
     }
+    removeProfile() {
+        localStorage.removeItem('profile');
+        this.showNavBar.emit(false);
+        this.router.navigateByUrl('/');
+    }
 };
 MenuBarService = __decorate([
     core_1.Injectable(), 
-    __metadata('design:paramtypes', [])
+    __metadata('design:paramtypes', [router_1.Router])
 ], MenuBarService);
 exports.MenuBarService = MenuBarService;
 //# sourceMappingURL=service.menubar.js.map

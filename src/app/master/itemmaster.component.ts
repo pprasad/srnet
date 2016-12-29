@@ -2,6 +2,7 @@ import{Component,OnInit,Output} from '@angular/core';
 import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
 import {ItemMasterService} from '../services/itemmaster.service';
 import {ItemMaster}  from '../dao/itemmaster.dao';
+import {MenuBarService} from '../services/service.menubar';
 @Component({
    moduleId:module.id,
    templateUrl:'itemmaster.component.html',
@@ -16,7 +17,9 @@ export class ItemMasterComponent implements OnInit{
     rows:any[];
     columns:any[];
     object:any;
-    constructor(private fb:FormBuilder,private service:ItemMasterService){ }
+    constructor(private fb:FormBuilder,private service:ItemMasterService,private menubar:MenuBarService){
+        this.menubar.routeIsChanging(true);
+     }
     ngOnInit(){
         this.itemMasterForm=this.fb.group({
             itemId:[''],
@@ -41,9 +44,7 @@ export class ItemMasterComponent implements OnInit{
          
     }
     callbackfn(event:Event){
-         console.info("Event{}....");
          if(event!=null){
-             console.info("Hello.....");
              this.object=event;
              this.itemMasterForm.setValue({'itemId':event.itemId,'itemCode':event.itemCode,'itemName':event.itemName,"itemDesc":event.itemDesc});
          }

@@ -30,6 +30,7 @@ export class LoginComponent implements OnInit{
        this.service.getUserLogin(data).subscribe(
            res=>{this.menuBar.routeIsChanging(true);
              this.router.navigateByUrl('/home');
+             localStorage.setItem('profile',model.value.userName);
            },
            error=>this.errorMsg=error
        )

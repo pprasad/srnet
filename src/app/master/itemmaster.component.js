@@ -11,10 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 const core_1 = require('@angular/core');
 const forms_1 = require('@angular/forms');
 const itemmaster_service_1 = require('../services/itemmaster.service');
+const service_menubar_1 = require('../services/service.menubar');
 let ItemMasterComponent = class ItemMasterComponent {
-    constructor(fb, service) {
+    constructor(fb, service, menubar) {
         this.fb = fb;
         this.service = service;
+        this.menubar = menubar;
+        this.menubar.routeIsChanging(true);
     }
     ngOnInit() {
         this.itemMasterForm = this.fb.group({
@@ -39,9 +42,7 @@ let ItemMasterComponent = class ItemMasterComponent {
         this.service.save(data).subscribe(res => { this.updateDataTable(); }, error => this.errorMsg = error);
     }
     callbackfn(event) {
-        console.info("Event{}....");
         if (event != null) {
-            console.info("Hello.....");
             this.object = event;
             this.itemMasterForm.setValue({ 'itemId': event.itemId, 'itemCode': event.itemCode, 'itemName': event.itemName, "itemDesc": event.itemDesc });
         }
@@ -53,7 +54,7 @@ ItemMasterComponent = __decorate([
         templateUrl: 'itemmaster.component.html',
         providers: [itemmaster_service_1.ItemMasterService]
     }), 
-    __metadata('design:paramtypes', [forms_1.FormBuilder, itemmaster_service_1.ItemMasterService])
+    __metadata('design:paramtypes', [forms_1.FormBuilder, itemmaster_service_1.ItemMasterService, service_menubar_1.MenuBarService])
 ], ItemMasterComponent);
 exports.ItemMasterComponent = ItemMasterComponent;
 //# sourceMappingURL=itemmaster.component.js.map

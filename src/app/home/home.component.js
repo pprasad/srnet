@@ -9,17 +9,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 const core_1 = require("@angular/core");
+const service_menubar_1 = require('../services/service.menubar');
 let HomeComponent = class HomeComponent {
-    constructor() {
+    constructor(menuBarService) {
+        this.menuBarService = menuBarService;
     }
-    ngOnInit() { }
+    ngOnInit() {
+        this.menuBarService.routeIsChanging(true);
+    }
 };
 HomeComponent = __decorate([
     core_1.Component({
         moduleId: module.id,
         templateUrl: 'home.component.html'
     }), 
-    __metadata('design:paramtypes', [])
+    __metadata('design:paramtypes', [service_menubar_1.MenuBarService])
 ], HomeComponent);
 exports.HomeComponent = HomeComponent;
 //# sourceMappingURL=home.component.js.map

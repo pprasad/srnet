@@ -18,6 +18,10 @@ let ItemMasterService = class ItemMasterService {
         this._http = _http;
         this.GET_URL = "/api/getitemmaster";
         this.SAVE_URL = "/api/saveitemmaster";
+        this.GET_ITEM_CODES = "/api/getitemcodes";
+        this.SAVE_STOCK_URL = "/api/save/stockentry";
+        this.GET_STOCK_URL = "/api/get/stockentry";
+        this.GET_STOCK_RATES_URL = "/api/get/stockitemswithrate";
     }
     getList() {
         console.info("============Gelist====================");
@@ -28,6 +32,21 @@ let ItemMasterService = class ItemMasterService {
         headers.append('Content-Type', 'application/json');
         console.info("model" + model);
         return this._http.post(this.SAVE_URL, model, { headers }).map(res => res).catch(this.handleError);
+    }
+    getItemCodes() {
+        return this._http.get(this.GET_ITEM_CODES).map(res => res.json()).catch(this.handleError);
+    }
+    saveStock(model) {
+        let headers = new http_1.Headers();
+        headers.append('Content-Type', 'application/json');
+        console.info("model" + model);
+        return this._http.post(this.SAVE_STOCK_URL, model, { headers }).map(res => res).catch(this.handleError);
+    }
+    getStockList() {
+        return this._http.get(this.GET_STOCK_URL).map(res => res.json()).catch(this.handleError);
+    }
+    getStockwithRates() {
+        return this._http.get(this.GET_STOCK_RATES_URL).map(res => res.json()).catch(this.handleError);
     }
     handleError(error) {
         let errMsg = (error.message) ? error.message :

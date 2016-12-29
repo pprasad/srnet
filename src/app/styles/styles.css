@@ -272,3 +272,37 @@ input:-webkit-autofill {
  .ui-datepicker{
    z-index: 100 !important;
  }
+ .scroll {
+    width: 100%; /* Optional */
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+.scroll tbody,
+.scroll thead,.scroll tfoot { display: block; }
+.scroll thead tr td { 
+    height:30px;
+    line-height: 30px;
+    width:200px
+}
+.scroll tbody {
+    height:300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.scroll tfoot tr td {
+    text-align:center; 
+    height:10px;
+    line-height:10px;
+    width:200px
+}
+.scroll tbody { border-top: 2px solid black; }
+.scroll tbody td, .scroll thead th {
+    width: 20%; /* Optional */
+}
+.scroll tbody td:last-child, .scroll thead th:last-child {
+    border-right: none;
+}
+.logout{
+  float:right;
+  cursor:pointer;  
+}

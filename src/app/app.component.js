@@ -16,6 +16,14 @@ let AppComponent = class AppComponent {
         this.showMenu = false;
         menuBarService.onRouteChanged().subscribe((showmenu) => this.showMenu = showmenu);
     }
+    logout() {
+        try {
+            this.menuBarService.removeProfile();
+        }
+        catch (e) {
+            console.info("Exception{}" + e);
+        }
+    }
 };
 AppComponent = __decorate([
     core_1.Component({

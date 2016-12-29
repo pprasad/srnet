@@ -1,12 +1,14 @@
 import{Component,OnInit,Input,AfterViewInit,AfterViewChecked,forwardRef,Output,EventEmitter} from '@angular/core';
 import {NG_VALUE_ACCESSOR,ControlValueAccessor } from '@angular/forms';
+import { Observable } from 'rxjs/Rx';
+let length:number=0;
 @Component({
     selector:'datatable',
     templateUrl:`app/template/datatable.template.html`
 })
 export class DataTable implements OnInit,ControlValueAccessor,AfterViewChecked{
     @Input('itemlist')
-    public itemlist:any[]=[];
+    public itemlist:any[];
     @Input('rows') 
     public rows:any[];
     @Input() 
@@ -25,16 +27,19 @@ export class DataTable implements OnInit,ControlValueAccessor,AfterViewChecked{
     currentPage:number=0;
     nextVisiable:string="visible";
     constructor(){}
-    ngOnInit(){}
+    ngOnInit(){
+            console.info(this.itemlist);
+    }
     ngAfterViewChecked(){
-       window.setTimeout(() =>this.init(),0);
-      
+         window.setTimeout(() =>this.init(),0);
     }
     init(){
-        if(this.itemlist!=undefined && this.isCallback){
+        if(this.itemlist!=undefined && (this.isCallback|| length!=this.itemlist.length)){
             this.isCallback=false;
+            length=this.itemlist.length;
             this.totalSize=this.itemlist.length;
             this.totalPages=Math.floor(this.totalSize/this.itemsPerPage);
+            this.totalPages=(this.totalPages==0)?(this.totalPages+=1):this.totalPages;
             this.viewUpdateModel(this.currentPage);
             console.info("Hello.........."+this.isCallback);
         }

@@ -9,9 +9,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 const core_1 = require('@angular/core');
+let length = 0;
 let DataTable = class DataTable {
     constructor() {
-        this.itemlist = [];
         this.rowChanged = new core_1.EventEmitter();
         this.isCallback = true;
         this.displayItems = [];
@@ -20,15 +20,19 @@ let DataTable = class DataTable {
         this.currentPage = 0;
         this.nextVisiable = "visible";
     }
-    ngOnInit() { }
+    ngOnInit() {
+        console.info(this.itemlist);
+    }
     ngAfterViewChecked() {
         window.setTimeout(() => this.init(), 0);
     }
     init() {
-        if (this.itemlist != undefined && this.isCallback) {
+        if (this.itemlist != undefined && (this.isCallback || length != this.itemlist.length)) {
             this.isCallback = false;
+            length = this.itemlist.length;
             this.totalSize = this.itemlist.length;
             this.totalPages = Math.floor(this.totalSize / this.itemsPerPage);
+            this.totalPages = (this.totalPages == 0) ? (this.totalPages += 1) : this.totalPages;
             this.viewUpdateModel(this.currentPage);
             console.info("Hello.........." + this.isCallback);
         }

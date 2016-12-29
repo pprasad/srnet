@@ -11,4 +11,11 @@ export class AppComponent{
     constructor(private menuBarService:MenuBarService){
        menuBarService.onRouteChanged().subscribe((showmenu:boolean)=>this.showMenu=showmenu);
     }
+    logout(){
+        try{
+            this.menuBarService.removeProfile();
+        }catch(e){
+            console.info("Exception{}"+e);
+        }
+    }
 }
