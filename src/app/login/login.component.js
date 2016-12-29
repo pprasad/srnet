@@ -28,12 +28,16 @@ let LoginComponent = class LoginComponent {
         });
     }
     login(model) {
-        console.info(model);
         let data = JSON.stringify(model.value);
         this.service.getUserLogin(data).subscribe(res => {
-            this.menuBar.routeIsChanging(true);
-            this.router.navigateByUrl('/home');
-            localStorage.setItem('profile', model.value.userName);
+            if (res._body == "SUCCESS") {
+                this.menuBar.routeIsChanging(true);
+                this.router.navigateByUrl('/home');
+                localStorage.setItem('profile', model.value.userName);
+            }
+            else {
+                this.errorMsg = "Please check Username or Password";
+            }
         }, error => this.errorMsg = error);
     }
 };
