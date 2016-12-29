@@ -21,15 +21,15 @@ app.get('/', function( req, res) {
 });
 //Userrelated data from the database
 app.post('/userverify',function(req,res){
-    console.info(req.body);
     var sql="SELECT * FROM USER_LOGIN WHERE USER_NAME=? AND USER_PWD=?";
     global.client.query(sql,[req.body.userName,req.body.userPwd],function(err,rows){
           if(err) throw err;
           else{
-              for(row in rows){
-                  console.info("Row{}"+row);
+              if(rows[0]!=undefined){
+                  res.send("SUCCESS");
+              }else{
+                  res.send("FAILURE"); 
               }
-            res.send(rows);
           }
     });
 })
