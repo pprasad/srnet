@@ -42,7 +42,16 @@ let NetUserInfoComponent = class NetUserInfoComponent {
         this.service.save(data).subscribe(res => { this.errorMsg = res._body; this.updatemodel(model); }, error => this.errorMsg = error);
     }
     updatemodel(model) {
-        this.service.getUserList().subscribe(res => this.users = res);
+        let obj = model.value;
+        if (obj.userid == null || obj.userid == '') {
+            this.service.getUserList().subscribe(res => this.users = res);
+        }
+        else {
+            this.object.firstname = obj.firstname;
+            this.object.surname = obj.surname;
+            this.object.mobileno = obj.mobileno;
+            this.object.address = obj.address;
+        }
     }
     callbackfn(event) {
         this.object = event;

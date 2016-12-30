@@ -54,6 +54,17 @@ app.post('/api/saveitemmaster',function(req,res){
           }
     });
 });
+app.delete('/api/delete/item',function(req,res){
+  console.info("*************Delete the Item***********************");
+  var sql="DELETE FROM ITEM_MASTER WHERE ITEM_ID=?";
+  var params=[req.query.itemid];
+   global.client.query(sql,params,function(err,rows){
+          if(err)res.send(err);
+          else{
+              res.send("Successfully Deleted");
+          }
+   });
+});
 app.get('/api/getitemmaster',function(req,res){
     var sql="SELECT * FROM ITEM_MASTER";
     var items=[];
@@ -153,6 +164,17 @@ app.get('/api/get/stockentry',function(req,res){
             }
      });
 })
+app.delete('/api/delete/stock',function(req,res){
+  console.info("*************Delete the Item***********************");
+  var sql="DELETE FROM STOCK_ENTRY WHERE STOCK_ID=?";
+  var params=[req.query.stockid];
+   global.client.query(sql,params,function(err,rows){
+          if(err)res.send(err);
+          else{
+              res.send("Successfully Deleted");
+          }
+   });
+});
 //Get the itemcode ,itemname and  rates from the stock entry table
 app.get('/api/get/stockitemswithrate',function(req,res){
      var sql="SELECT DISTINCT QTY.ITEM_CODE,ITM.ITEM_NAME,QTY.QTY,QTY.RATE FROM STOCK_QUANTITY QTY JOIN STOCK_ENTRY SEN ON QTY.ITEM_CODE=SEN.ITEM_CODE JOIN ITEM_MASTER ITM ON QTY.ITEM_CODE=ITM.ITEM_CODE";
@@ -174,14 +196,27 @@ app.get('/api/get/stockitemswithrate',function(req,res){
 });
 /*Save Internet Users*/
 app.post('/api/savenetuser',function(req,res){
-    var sql="INSERT INTO USER_INFO(FIRST_NAME,SUR_NAME,CONTACT_NO,ADDRESS) VALUES(?,?,?,?)";
-    var params=[req.body.firstname,req.body.surname,req.body.mobileno,req.body.address];
-    global.client.query(sql,params,function(err,rows){
-          if(err) throw err;
-          else{
-             res.send("Successfully Saved");
-          }
-    });
+    var obj=req.body;
+    var sql=null;var params=null;
+    if(obj.userid==null||obj.userid==''){
+        sql="INSERT INTO USER_INFO(FIRST_NAME,SUR_NAME,CONTACT_NO,ADDRESS) VALUES(?,?,?,?)";
+        params=[req.body.firstname,req.body.surname,req.body.mobileno,req.body.address];
+        global.client.query(sql,params,function(err,rows){
+            if(err) throw err;
+            else{
+                res.send("Successfully Saved");
+            }
+        });
+    }else{
+        sql="UPDATE USER_INFO SET FIRST_NAME=?,SUR_NAME=?,CONTACT_NO=?,ADDRESS=? WHERE USER_ID=?";
+        params=[req.body.firstname,req.body.surname,req.body.mobileno,req.body.address,req.body.userid];
+        global.client.query(sql,params,function(err,rows){
+            if(err) throw err;
+            else{
+                res.send("Successfully Updated");
+            }
+        });
+    }
 });
 app.get('/api/getuserlist',function(req,res){
      var sql="SELECT * FROM USER_INFO";

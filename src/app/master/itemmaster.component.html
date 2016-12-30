@@ -31,5 +31,6 @@
 	       
 		</form>
 	 </div>
-	  <datatable  [rows]="rows" [columns]="columns" [itemlist]="itemMasters" [iseditable]=true  (selectedRow)="callbackfn($event)"></datatable>
+	  <datatable  [rows]="rows" [columns]="columns" [itemlist]="itemMasters" [iseditable]=true  (selectedRow)="callbackfn($event)"
+	   (removeRow)="removeRow($event)"></datatable>
 </div>

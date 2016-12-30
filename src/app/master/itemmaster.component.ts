@@ -1,8 +1,10 @@
-import{Component,OnInit,Output} from '@angular/core';
+import{Component,OnInit,Output,ViewContainerRef} from '@angular/core';
 import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
 import {ItemMasterService} from '../services/itemmaster.service';
 import {ItemMaster}  from '../dao/itemmaster.dao';
 import {MenuBarService} from '../services/service.menubar';
+import { Overlay, overlayConfigFactory } from 'angular2-modal';
+import { Modal, BSModalContext } from 'angular2-modal/plugins/bootstrap';
 @Component({
    moduleId:module.id,
    templateUrl:'itemmaster.component.html',
@@ -17,7 +19,9 @@ export class ItemMasterComponent implements OnInit{
     rows:any[];
     columns:any[];
     object:any=null;
-    constructor(private fb:FormBuilder,private service:ItemMasterService,private menubar:MenuBarService){
+    constructor(private fb:FormBuilder,private service:ItemMasterService,private menubar:MenuBarService,
+    vcRef: ViewContainerRef, public modal: Modal){
+        this.modal.overlay.defaultViewContainer=vcRef;
         this.menubar.routeIsChanging(true);
      }
     ngOnInit(){
@@ -56,6 +60,19 @@ export class ItemMasterComponent implements OnInit{
              this.object=event;
              this.itemMasterForm.setValue({'itemId':event.itemId,'itemCode':event.itemCode,'itemName':event.itemName,"itemDesc":event.itemDesc});
          }
+    }
+    removeRow(event:any){
+     let val=this.modal.confirm()
+            .size('sm')
+            .showClose(true)
+            .title("Waring Message")
+            .body('Do you what Delete Record?')
+            .open().then(dialog => dialog.result)
+            .then(result =>this.searchAndRemove(event))
+            .catch(err =>console.info("Cancel...."));
+    }
+    searchAndRemove(obj:any):void{
+        this.service.deleteitem(obj.itemId).subscribe(res=>this.updateDataTable());
     }
     onReset():void{
         this.init();

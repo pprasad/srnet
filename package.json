@@ -6,7 +6,7 @@
     "tsc": "tsc",
     "tsc:w": "tsc --watch",
     "lite": "lite-server",
-    "start": "node server.js"
+    "start":"node server.js"
   },
   "dependencies": {
     "@angular/common": "2.2.0",

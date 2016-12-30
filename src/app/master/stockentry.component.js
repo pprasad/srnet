@@ -12,14 +12,17 @@ const core_1 = require('@angular/core');
 const forms_1 = require('@angular/forms');
 const service_menubar_1 = require('../services/service.menubar');
 const itemmaster_service_1 = require('../services/itemmaster.service');
+const bootstrap_1 = require('angular2-modal/plugins/bootstrap');
 let StockEntryComponent = class StockEntryComponent {
-    constructor(menuBarService, fb, service) {
+    constructor(menuBarService, fb, service, vcRef, modal) {
         this.menuBarService = menuBarService;
         this.fb = fb;
         this.service = service;
+        this.modal = modal;
         this.stockTypes = [{ "id": "pkt", "value": "Packets" }, { "id": "nos", "value": "Pieces" }, { "id": "bundel", "value": "Bundel" }];
         this.rows = [];
         this.columns = [];
+        this.modal.overlay.defaultViewContainer = vcRef;
         this.menuBarService.routeIsChanging(true);
     }
     ngOnInit() {
@@ -83,6 +86,19 @@ let StockEntryComponent = class StockEntryComponent {
             });
         }
     }
+    removeRow(event) {
+        let val = this.modal.confirm()
+            .size('sm')
+            .showClose(true)
+            .title("Waring Message")
+            .body('Do you what Delete Record?')
+            .open().then(dialog => dialog.result)
+            .then(result => this.searchAndRemove(event))
+            .catch(err => console.info("Cancel...."));
+    }
+    searchAndRemove(obj) {
+        this.service.deletestock(obj.stockid).subscribe(res => this.updatetableModel(this.stockEntryForm));
+    }
     onReset() {
         this.ngOnInit();
         this.errorMsg = '';
@@ -94,7 +110,7 @@ StockEntryComponent = __decorate([
         templateUrl: 'stockentry.component.html',
         providers: [itemmaster_service_1.ItemMasterService]
     }), 
-    __metadata('design:paramtypes', [service_menubar_1.MenuBarService, forms_1.FormBuilder, itemmaster_service_1.ItemMasterService])
+    __metadata('design:paramtypes', [service_menubar_1.MenuBarService, forms_1.FormBuilder, itemmaster_service_1.ItemMasterService, core_1.ViewContainerRef, bootstrap_1.Modal])
 ], StockEntryComponent);
 exports.StockEntryComponent = StockEntryComponent;
 //# sourceMappingURL=stockentry.component.js.map

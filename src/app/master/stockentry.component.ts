@@ -1,10 +1,12 @@
-import{Component,OnInit} from '@angular/core';
+import{Component,OnInit,ViewContainerRef} from '@angular/core';
 import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
 import {MenuBarService} from '../services/service.menubar';
 import {ItemMasterService} from '../services/itemmaster.service';
 import {ItemMaster}  from '../dao/itemmaster.dao';
 import {StockEntry} from '../dao/stockentry.dao';
 import { Observable } from 'rxjs/Rx';
+import { Overlay, overlayConfigFactory } from 'angular2-modal';
+import { Modal, BSModalContext } from 'angular2-modal/plugins/bootstrap';
 @Component({
     moduleId:module.id,
     templateUrl:'stockentry.component.html',
@@ -21,7 +23,8 @@ export class StockEntryComponent implements OnInit{
     columns:any[]=[];
     callObject:any;
     constructor(private menuBarService:MenuBarService,private fb:FormBuilder,
-    private service:ItemMasterService){
+    private service:ItemMasterService,vcRef: ViewContainerRef, public modal: Modal){
+        this.modal.overlay.defaultViewContainer=vcRef;
         this.menuBarService.routeIsChanging(true);
     }
     ngOnInit(){
@@ -85,6 +88,19 @@ export class StockEntryComponent implements OnInit{
                adjqty:this.callObject.itemqty
              });
          }
+    }
+    removeRow(event:any){
+     let val=this.modal.confirm()
+            .size('sm')
+            .showClose(true)
+            .title("Waring Message")
+            .body('Do you what Delete Record?')
+            .open().then(dialog => dialog.result)
+            .then(result =>this.searchAndRemove(event))
+            .catch(err =>console.info("Cancel...."));
+    }
+    searchAndRemove(obj:any):void{
+        this.service.deletestock(obj.stockid).subscribe(res=>this.updatetableModel(this.stockEntryForm));
     }
     onReset(){
          this.ngOnInit();

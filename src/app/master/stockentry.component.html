@@ -55,6 +55,7 @@
 	  </form>
   </div>
   <!--Table Data-->
-  <datatable  [rows]="rows" [columns]="columns" [itemlist]="stockentrys" [iseditable]=true  (selectedRow)="callbackfn($event)"></datatable>
+  <datatable  [rows]="rows" [columns]="columns" [itemlist]="stockentrys" [iseditable]=true  (selectedRow)="callbackfn($event)"
+   (removeRow)="removeRow($event)"></datatable>
   <!--End tabledata-->
 </div>              

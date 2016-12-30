@@ -22,6 +22,8 @@ let ItemMasterService = class ItemMasterService {
         this.SAVE_STOCK_URL = "/api/save/stockentry";
         this.GET_STOCK_URL = "/api/get/stockentry";
         this.GET_STOCK_RATES_URL = "/api/get/stockitemswithrate";
+        this.DELETE_ITEM_URL = "/api/delete/item?itemid";
+        this.DELETE_STOCK_URL = "/api/delete/stock?stockid";
     }
     getList() {
         console.info("============Gelist====================");
@@ -47,6 +49,12 @@ let ItemMasterService = class ItemMasterService {
     }
     getStockwithRates() {
         return this._http.get(this.GET_STOCK_RATES_URL).map(res => res.json()).catch(this.handleError);
+    }
+    deleteitem(itemid) {
+        return this._http.delete(this.DELETE_ITEM_URL + "=" + itemid).map(res => res).catch(this.handleError);
+    }
+    deletestock(stockid) {
+        return this._http.delete(this.DELETE_STOCK_URL + "=" + stockid).map(res => res).catch(this.handleError);
     }
     handleError(error) {
         let errMsg = (error.message) ? error.message :

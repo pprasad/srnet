@@ -14,6 +14,8 @@ export class ItemMasterService{
      private SAVE_STOCK_URL:string="/api/save/stockentry";
      private GET_STOCK_URL:string="/api/get/stockentry";
      private GET_STOCK_RATES_URL="/api/get/stockitemswithrate";
+     private DELETE_ITEM_URL="/api/delete/item?itemid";
+     private DELETE_STOCK_URL="/api/delete/stock?stockid";
      constructor(public _http: Http) { }
      getList():Observable<ItemMaster[]>{
          console.info("============Gelist====================");
@@ -39,6 +41,12 @@ export class ItemMasterService{
       }
       getStockwithRates():Observable<any[]>{
            return this._http.get(this.GET_STOCK_RATES_URL).map(res=><any[]>res.json()).catch(this.handleError);
+      }
+      deleteitem(itemid:number):Observable<any>{
+              return this._http.delete(this.DELETE_ITEM_URL+"="+itemid).map(res=>res).catch(this.handleError);
+      }
+      deletestock(stockid:number):Observable<any>{
+              return this._http.delete(this.DELETE_STOCK_URL+"="+stockid).map(res=>res).catch(this.handleError);
       }
       private handleError (error: any) {
        let errMsg = (error.message) ? error.message :

@@ -12,12 +12,15 @@ const core_1 = require('@angular/core');
 const forms_1 = require('@angular/forms');
 const itemmaster_service_1 = require('../services/itemmaster.service');
 const service_menubar_1 = require('../services/service.menubar');
+const bootstrap_1 = require('angular2-modal/plugins/bootstrap');
 let ItemMasterComponent = class ItemMasterComponent {
-    constructor(fb, service, menubar) {
+    constructor(fb, service, menubar, vcRef, modal) {
         this.fb = fb;
         this.service = service;
         this.menubar = menubar;
+        this.modal = modal;
         this.object = null;
+        this.modal.overlay.defaultViewContainer = vcRef;
         this.menubar.routeIsChanging(true);
     }
     ngOnInit() {
@@ -57,6 +60,19 @@ let ItemMasterComponent = class ItemMasterComponent {
             this.itemMasterForm.setValue({ 'itemId': event.itemId, 'itemCode': event.itemCode, 'itemName': event.itemName, "itemDesc": event.itemDesc });
         }
     }
+    removeRow(event) {
+        let val = this.modal.confirm()
+            .size('sm')
+            .showClose(true)
+            .title("Waring Message")
+            .body('Do you what Delete Record?')
+            .open().then(dialog => dialog.result)
+            .then(result => this.searchAndRemove(event))
+            .catch(err => console.info("Cancel...."));
+    }
+    searchAndRemove(obj) {
+        this.service.deleteitem(obj.itemId).subscribe(res => this.updateDataTable());
+    }
     onReset() {
         this.init();
         this.errorMsg = '';
@@ -68,7 +84,7 @@ ItemMasterComponent = __decorate([
         templateUrl: 'itemmaster.component.html',
         providers: [itemmaster_service_1.ItemMasterService]
     }), 
-    __metadata('design:paramtypes', [forms_1.FormBuilder, itemmaster_service_1.ItemMasterService, service_menubar_1.MenuBarService])
+    __metadata('design:paramtypes', [forms_1.FormBuilder, itemmaster_service_1.ItemMasterService, service_menubar_1.MenuBarService, core_1.ViewContainerRef, bootstrap_1.Modal])
 ], ItemMasterComponent);
 exports.ItemMasterComponent = ItemMasterComponent;
 //# sourceMappingURL=itemmaster.component.js.map
