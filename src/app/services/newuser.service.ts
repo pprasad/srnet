@@ -13,6 +13,8 @@ export class NewUserService{
    private GET_URL_USER:string="/api/getuserlist";
    private SAVE_URL_SYSINFO="/api/save/sysinfo";
    private GET_URL_SYSINFO="/api/get/sysinfo";
+   private DEL_URL_SYSINFO="/api/get/removesysinfo?sysid";
+   private DEL_URL_USER="/api/get/deleteuser?userid";
    constructor(private http:Http){}
      getList():Observable<User[]>{
          console.info("============Gelist====================");
@@ -34,6 +36,12 @@ export class NewUserService{
      }
      getsysinfo():Observable<System[]>{
             return this.http.get(this.GET_URL_SYSINFO).map(res=><System[]>res.json()).catch(this.handleError);
+     }
+     deletesysinfo(sysid:any):Observable<any>{
+           return this.http.delete(this.DEL_URL_SYSINFO+"="+sysid).map(res=>res).catch(this.handleError);
+     }
+     deleteuser(userid:any):Observable<any>{
+          return this.http.delete(this.DEL_URL_USER+"="+userid).map(res=>res).catch(this.handleError);
      }
      private handleError (error: any) {
        let errMsg = (error.message) ? error.message :

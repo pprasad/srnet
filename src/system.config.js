@@ -1,5 +1,6 @@
 (function(global) {
   
+  var plugin = 'bootstrap';
   // map tells the System loader where to look for things
   var map = {
     'app':                        'app', // 'dist',
@@ -7,15 +8,20 @@
     'rxjs':                       'node_modules/rxjs',
     'mydatepicker':               'node_modules/mydatepicker',
     'jquery':                     'node_modules/jquery/dist/jquery.js',
-    'timepicker':                 'node_modules/jquery-timepicker/jquery.timepicker.js' 
+    'timepicker':                 'node_modules/jquery-timepicker/jquery.timepicker.js',
+    'angular2-modal':             'node_modules/angular2-modal' 
   };
   // packages tells the System loader how to load when no filename and/or no extension
   var packages = {
     'app':                        { main:'main.js',  defaultExtension: 'js' },
     'rxjs':                       { defaultExtension: 'js' },
     'mydatepicker':               { defaultExtension: 'js' },
-    'ng2-datetime':               {defaultExtension: 'js'}
+    'ng2-datetime':               {defaultExtension: 'js'},
+    'angular2-modal':             {main:'bundles/angular2-modal.umd',defaultExtension: 'js'}
   };
+
+  map[`angular2-modal/plugins/${plugin}`] = map['angular2-modal'] + '/bundles';
+  packages[`angular2-modal/plugins/${plugin}`] =  { defaultExtension: 'js', main: `angular2-modal.${plugin}.umd` };
 
   var ngPackageNames = [
     'common',

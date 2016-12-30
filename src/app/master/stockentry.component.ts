@@ -43,14 +43,16 @@ export class StockEntryComponent implements OnInit{
     }
     save(model:any){
         let data=JSON.stringify(model.value);
-        console.info("data{}"+data);
-        this.service.saveStock(data).subscribe(res=>this.errorMsg=res._body,error=>this.errorMsg=error);
-        this.updatetableModel(model);
+        this.service.saveStock(data).subscribe(
+        res=>{this.errorMsg=res._body;this.updatetableModel(model);}
+        ,error=>this.errorMsg=error);
     }
     onItemPriceChange(event:Event){
         let val=event.target.value;
-        let total=parseInt(this.stockEntryForm.value.itemqty)*parseInt(val);
-        this.stockEntryForm.patchValue({totalprice:total});
+        if(isNaN(val)){
+            let total=parseInt(this.stockEntryForm.value.itemqty)*parseInt(val);
+            this.stockEntryForm.patchValue({totalprice:total});
+        }
     }
     updatetableModel(model:any){
         let obj=model.value;
@@ -83,5 +85,9 @@ export class StockEntryComponent implements OnInit{
                adjqty:this.callObject.itemqty
              });
          }
+    }
+    onReset(){
+         this.ngOnInit();
+         this.errorMsg='';
     }
 }

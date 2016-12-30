@@ -17,6 +17,8 @@ export class DataTable implements OnInit,ControlValueAccessor,AfterViewChecked{
     public iseditable:boolean;
     @Output('selectedRow')
     public rowChanged:EventEmitter<string> = new EventEmitter<string>();
+    @Output('removeRow')
+    public rowRemoved:EventEmitter<string> = new EventEmitter<string>();
     @Input()
     isCallback:boolean=true;
     displayItems:any[]=[];
@@ -82,5 +84,9 @@ export class DataTable implements OnInit,ControlValueAccessor,AfterViewChecked{
     public selectedRow(rowId:number):void{
          console.info("rowId{}"+rowId);
          this.rowChanged.emit(this.displayItems[rowId]);
+    }
+
+    public removeRow(rowId:number):void{
+        this.rowRemoved.emit(this.displayItems[rowId]);
     }
 }

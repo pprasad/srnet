@@ -21,15 +21,18 @@ let ItemMasterComponent = class ItemMasterComponent {
         this.menubar.routeIsChanging(true);
     }
     ngOnInit() {
+        this.init();
+        this.rows = ['ItemId', 'ItemCode', 'ItemName', 'ItemDesc'];
+        this.columns = ['itemId', 'itemCode', 'itemName', 'itemDesc'];
+        this.updateDataTable();
+    }
+    init() {
         this.itemMasterForm = this.fb.group({
             itemId: [''],
             itemCode: ['', forms_1.Validators.required],
             itemName: ['', forms_1.Validators.required],
             itemDesc: ['']
         });
-        this.rows = ['ItemId', 'ItemCode', 'ItemName', 'ItemDesc'];
-        this.columns = ['itemId', 'itemCode', 'itemName', 'itemDesc'];
-        this.updateDataTable();
     }
     updateDataTable() {
         this.service.getList().subscribe(resItemMaster => this.itemMasters = resItemMaster);
@@ -42,7 +45,7 @@ let ItemMasterComponent = class ItemMasterComponent {
                 this.object.itemName = model.value.itemName;
                 this.object.itemDesc = model.value.itemDesc;
             }
-            this.service.save(data).subscribe(res => { this.updateDataTable(); }, error => this.errorMsg = error);
+            this.service.save(data).subscribe(res => { this.errorMsg = res._body; this.updateDataTable(); }, error => this.errorMsg = error);
         }
         catch (e) {
             console.info("Exception" + e);
@@ -53,6 +56,10 @@ let ItemMasterComponent = class ItemMasterComponent {
             this.object = event;
             this.itemMasterForm.setValue({ 'itemId': event.itemId, 'itemCode': event.itemCode, 'itemName': event.itemName, "itemDesc": event.itemDesc });
         }
+    }
+    onReset() {
+        this.init();
+        this.errorMsg = '';
     }
 };
 ItemMasterComponent = __decorate([

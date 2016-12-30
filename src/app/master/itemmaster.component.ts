@@ -21,15 +21,18 @@ export class ItemMasterComponent implements OnInit{
         this.menubar.routeIsChanging(true);
      }
     ngOnInit(){
-        this.itemMasterForm=this.fb.group({
+         this.init();
+         this.rows=['ItemId','ItemCode','ItemName','ItemDesc'];
+         this.columns=['itemId','itemCode','itemName','itemDesc'];
+         this.updateDataTable();
+    }
+    init(){
+      this.itemMasterForm=this.fb.group({
             itemId:[''],
             itemCode:['',Validators.required],
             itemName:['',Validators.required],
             itemDesc:[''] 
         });
-         this.rows=['ItemId','ItemCode','ItemName','ItemDesc'];
-         this.columns=['itemId','itemCode','itemName','itemDesc'];
-         this.updateDataTable();
     }
     updateDataTable(){
         this.service.getList().subscribe(resItemMaster=>this.itemMasters=resItemMaster);
@@ -42,7 +45,7 @@ export class ItemMasterComponent implements OnInit{
                 this.object.itemName=model.value.itemName;
                 this.object.itemDesc=model.value.itemDesc;  
             }
-           this.service.save(data).subscribe(res=>{this.updateDataTable();},error=>this.errorMsg=error);
+           this.service.save(data).subscribe(res=>{this.errorMsg=res._body;this.updateDataTable();},error=>this.errorMsg=error);
         }catch(e){
             console.info("Exception"+e);
         }
@@ -53,6 +56,9 @@ export class ItemMasterComponent implements OnInit{
              this.object=event;
              this.itemMasterForm.setValue({'itemId':event.itemId,'itemCode':event.itemCode,'itemName':event.itemName,"itemDesc":event.itemDesc});
          }
-      }
+    }
+    onReset():void{
+        this.init();
+        this.errorMsg='';
     }
 }

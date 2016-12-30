@@ -27,6 +27,12 @@ let BillinfoComponent = class BillinfoComponent {
         this.menubar.routeIsChanging(true);
     }
     ngOnInit() {
+        this.init();
+        this.rows.push(Object.assign({}, this.rowtemplate));
+        this.service.getStockwithRates().subscribe(res => this.stockrates = res);
+        this.userService.getUserList().subscribe(res => this.users = res);
+    }
+    init() {
         this.billEntryForm = this.fb.group({
             billno: [''],
             billdate: [''],
@@ -34,9 +40,6 @@ let BillinfoComponent = class BillinfoComponent {
             totalamt: [0],
             stocksoild: []
         });
-        this.rows.push(Object.assign({}, this.rowtemplate));
-        this.service.getStockwithRates().subscribe(res => this.stockrates = res);
-        this.userService.getUserList().subscribe(res => this.users = res);
     }
     selected(event, rowId) {
         console.info("Selected Event{}" + event + " index{}" + rowId);
@@ -44,15 +47,19 @@ let BillinfoComponent = class BillinfoComponent {
         this.rows[rowId].rate = event.rate;
     }
     changQtyEvent(event, rowId) {
-        console.info("RowId{}" + rowId);
         let rate = this.rows[rowId].rate;
         let val = event.target.value;
-        console.info("rate{}" + rate);
-        this.rows[rowId].amount = rate * parseInt(val);
-        this.rows[rowId].qty = val;
-        console.info("amount{}" + this.rows[rowId].amount);
-        let totalamt = this.billEntryForm.value.totalamt;
-        totalamt += this.rows[rowId].amount;
+        if (!isNaN(val)) {
+            this.rows[rowId].amount = rate * parseInt(val);
+            this.rows[rowId].qty = val;
+            this.calculateTotal();
+        }
+    }
+    calculateTotal() {
+        let totalamt = 0;
+        for (var row in this.rows) {
+            totalamt += this.rows[row].amount;
+        }
         this.billEntryForm.patchValue({ 'totalamt': totalamt });
     }
     addRowEvent() {
@@ -77,6 +84,12 @@ let BillinfoComponent = class BillinfoComponent {
         catch (e) {
             console.info("Exception{}" + e);
         }
+    }
+    onReset() {
+        this.init();
+        this.rows = [];
+        this.rows.push(Object.assign({}, this.rowtemplate));
+        this.errorMsg = '';
     }
 };
 BillinfoComponent = __decorate([

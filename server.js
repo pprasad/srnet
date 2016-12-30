@@ -90,10 +90,11 @@ app.get('/api/getitemcodes',function(req,res){
 })
 /*Save Stock  Entry*/
 app.post('/api/save/stockentry',function(req,res){
+      console.info("**********************Save Stock Information***************************");
       var obj=req.body;
       var sql=null;
       var params=null;
-      if(obj.stockid==null){
+      if(obj.stockid==null||obj.stockid==''){
          sql="INSERT INTO STOCK_ENTRY(STOCK_DATE,ITEM_CODE,UNIT,QUANTITY,PRICE,RATE,AMOUNT) VALUES(STR_TO_DATE(?,'%m/%d/%Y'),?,?,?,?,?,?)";
          params=[obj.stockdate,obj.itemcode,obj.stockunit,obj.itemqty,obj.itemprice,obj.itemrate,obj.totalprice];
       }else{
@@ -109,9 +110,9 @@ app.post('/api/save/stockentry',function(req,res){
       });
 });
 var updateStockQuantity=function(obj){
+      console.info("***************Update Stock Details****************************");
       sql="SELECT * FROM STOCK_QUANTITY WHERE ITEM_CODE=?";
                  global.client.query(sql,[obj.itemcode],function(err,rows){
-                       console.info("Rows{}"+rows.length);
                        if(rows.length==0){
                             sql="INSERT INTO STOCK_QUANTITY(ITEM_CODE,QTY,RATE) VALUES(?,?,?)";
                             global.client.query(sql,[obj.itemcode,obj.itemqty,obj.itemrate]);
@@ -130,6 +131,7 @@ var updateStockQuantity=function(obj){
       });
 }
 app.get('/api/get/stockentry',function(req,res){
+     console.info("********************************Stock Entry**********************************");
      var sql="SELECT * FROM STOCK_ENTRY";
      var stocks=[];
      global.client.query(sql,function(err,rows){
@@ -192,22 +194,48 @@ app.get('/api/getuserlist',function(req,res){
                    user.userid=rows[row].USER_ID;
                    user.firstname=rows[row].FIRST_NAME;
                    user.surname=rows[row].SUR_NAME;
+                   user.mobileno=rows[row].CONTACT_NO;
+                   user.address=rows[row].ADDRESS;
                    users.push(user);
              }
              res.send(users);
           }
     });
 });
+/*Delete user*/
+app.delete('/api/get/deleteuser',function(req,res){
+ console.info("*************Delete the User***********************");
+  var sql="DELETE FROM USER_INFO WHERE USER_ID=?";
+  var params=[req.query.userid];
+   global.client.query(sql,params,function(err,rows){
+          if(err)res.send(err);
+          else{
+              res.send("Successfully Deleted");
+          }
+   });
+});
 app.post('/api/save/sysinfo',function(req,res){
     var obj=req.body;
-    var sql="INSERT INTO SYSTEM_INFO(USER_ID,SYS_NO,SYS_DATE,SYS_HOUR,START_TIME,END_TIME,AMOUNT,PAID_AMT,BALANCE) VALUES(?,?,STR_TO_DATE(?,'%m/%d/%Y'),?,?,?,?,?,?)";
-    var params=[obj.userid,obj.sysno,obj.sysdate,obj.syshour,obj.starttime,obj.endtime,obj.amount,obj.paidamt,obj.balance];
-    global.client.query(sql,params,function(err,rows){
-          if(err) throw err;
-          else{
-             res.send("Successfully Saved");
-          }
-    });
+    var sql=null;var params=null;
+    if(obj.sysid==null || obj.sysid==''){
+        sql="INSERT INTO SYSTEM_INFO(USER_ID,SYS_NO,SYS_DATE,SYS_HOUR,START_TIME,END_TIME,AMOUNT,PAID_AMT,BALANCE) VALUES(?,?,?,?,?,?,?,?,?)";
+        params=[obj.userid,obj.sysno,dateFormat(obj.sysdate,app.get('sql.date')),obj.syshour,obj.starttime,obj.endtime,obj.amount,obj.paidamt,obj.balance];
+        global.client.query(sql,params,function(err,rows){
+            if(err) throw err;
+            else{
+                res.send("Successfully Saved");
+            }
+        });
+    }else{
+         sql="UPDATE SYSTEM_INFO SET USER_ID=?,SYS_NO=?,SYS_DATE=?,SYS_HOUR=?,START_TIME=?,END_TIME=?,AMOUNT=?,PAID_AMT=?,BALANCE=?  WHERE SYS_ID=?";
+         params=[obj.userid,obj.sysno,dateFormat(obj.sysdate,app.get('sql.date')),obj.syshour,obj.starttime,obj.endtime,obj.amount,obj.paidamt,obj.balance,obj.sysid];
+         global.client.query(sql,params,function(err,rows){
+            if(err) throw err;
+            else{
+                res.send("Successfully Updated");
+            }
+        });
+    }
 });
 app.get('/api/get/sysinfo',function(req,res){
      var sql="SELECT * FROM SYSTEM_INFO SYS JOIN USER_INFO UINFO ON SYS.USER_ID=UINFO.USER_ID";
@@ -221,7 +249,7 @@ app.get('/api/get/sysinfo',function(req,res){
                    sysinfo.userid=rows[row].USER_ID;
                    sysinfo.username=rows[row].SUR_NAME+" "+rows[row].FIRST_NAME;
                    sysinfo.sysno=rows[row].SYS_NO;
-                   sysinfo.sysdate=rows[row].SYS_DATE;
+                   sysinfo.sysdate=dateFormat(rows[row].SYS_DATE,"mm/dd/yyyy");
                    sysinfo.syshour=rows[row].SYS_HOUR;
                    sysinfo.starttime=rows[row].START_TIME;
                    sysinfo.endtime=rows[row].END_TIME;
@@ -230,10 +258,21 @@ app.get('/api/get/sysinfo',function(req,res){
                    sysinfo.balance=rows[row].balance;
                    sysinfos.push(sysinfo);
               }
-              console.info(JSON.stringify(sysinfos));
               res.send(sysinfos);
            }
      })
+})
+/*Delete sysinformation by using sysid*/
+app.delete('/api/get/removesysinfo',function(req,res){
+  console.info("*************Delete the sysinformation***********************");
+  var sql="DELETE FROM SYSTEM_INFO WHERE SYS_ID=?";
+  var params=[req.query.sysid];
+   global.client.query(sql,params,function(err,rows){
+          if(err)res.send(err);
+          else{
+              res.send("Successfully Deleted");
+          }
+   });
 })
 /*generate autobillno*/
 app.get('/api/get/autobillno',function(req,res){

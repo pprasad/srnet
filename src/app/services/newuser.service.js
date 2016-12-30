@@ -21,6 +21,8 @@ let NewUserService = class NewUserService {
         this.GET_URL_USER = "/api/getuserlist";
         this.SAVE_URL_SYSINFO = "/api/save/sysinfo";
         this.GET_URL_SYSINFO = "/api/get/sysinfo";
+        this.DEL_URL_SYSINFO = "/api/get/removesysinfo?sysid";
+        this.DEL_URL_USER = "/api/get/deleteuser?userid";
     }
     getList() {
         console.info("============Gelist====================");
@@ -42,6 +44,12 @@ let NewUserService = class NewUserService {
     }
     getsysinfo() {
         return this.http.get(this.GET_URL_SYSINFO).map(res => res.json()).catch(this.handleError);
+    }
+    deletesysinfo(sysid) {
+        return this.http.delete(this.DEL_URL_SYSINFO + "=" + sysid).map(res => res).catch(this.handleError);
+    }
+    deleteuser(userid) {
+        return this.http.delete(this.DEL_URL_USER + "=" + userid).map(res => res).catch(this.handleError);
     }
     handleError(error) {
         let errMsg = (error.message) ? error.message :

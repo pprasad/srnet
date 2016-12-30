@@ -5,6 +5,7 @@
   <div class="panel-body">
 	  <div class="alert alert-warning"><strong>Warning!</strong>{{errorMsg}}</div>
 	  <form  [formGroup]="systemForm"  (ngSubmit)="save(systemForm)" class="form-horizontal">
+		  <input type="hidden" formControlName="sysid">
 		   <div class="form-group">
 				<label  for="userid" class="col-xs-2">User</label>
 				<div class="col-xs-4">
@@ -28,7 +29,7 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label  for="syshour" class="col-xs-2">Hours</label>
+				<label  for="syshour" class="col-xs-2">Hours/Mins</label>
 				<div class="col-xs-4">
 					<input  type="text" formControlName="syshour" class="form-control" id="syshour" placeholder="Hours" />
 				</div>
@@ -56,11 +57,12 @@
 			</div>
 			<div class="col-xs-10 col-xs-offset-2">
 				<button type="submit" class="btn btn-primary" [disabled]='!systemForm.valid'>Submit </button> 
-				<button type="reset" class="btn btn-default">Reset</button>
+				<button type="button" class="btn btn-default" (click)="onReset()">Reset</button>
 			</div>
 	  </form>
   </div>
   <!--Table Data-->
-  <datatable  [rows]="rows" [columns]="columns" [itemlist]="sysinfos" [iseditable]=true  (selectedRow)="callbackfn($event)"></datatable>
+  <datatable  [rows]="rows" [columns]="columns" [itemlist]="sysinfos" [iseditable]=true  (selectedRow)="callbackfn($event)"
+		  (removeRow)="removeRow($event)"></datatable>
   <!--End tabledata-->
 </div>              

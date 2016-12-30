@@ -41,14 +41,14 @@ let StockEntryComponent = class StockEntryComponent {
     }
     save(model) {
         let data = JSON.stringify(model.value);
-        console.info("data{}" + data);
-        this.service.saveStock(data).subscribe(res => this.errorMsg = res._body, error => this.errorMsg = error);
-        this.updatetableModel(model);
+        this.service.saveStock(data).subscribe(res => { this.errorMsg = res._body; this.updatetableModel(model); }, error => this.errorMsg = error);
     }
     onItemPriceChange(event) {
         let val = event.target.value;
-        let total = parseInt(this.stockEntryForm.value.itemqty) * parseInt(val);
-        this.stockEntryForm.patchValue({ totalprice: total });
+        if (isNaN(val)) {
+            let total = parseInt(this.stockEntryForm.value.itemqty) * parseInt(val);
+            this.stockEntryForm.patchValue({ totalprice: total });
+        }
     }
     updatetableModel(model) {
         let obj = model.value;
@@ -82,6 +82,10 @@ let StockEntryComponent = class StockEntryComponent {
                 adjqty: this.callObject.itemqty
             });
         }
+    }
+    onReset() {
+        this.ngOnInit();
+        this.errorMsg = '';
     }
 };
 StockEntryComponent = __decorate([

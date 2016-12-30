@@ -13,6 +13,7 @@ let length = 0;
 let DataTable = class DataTable {
     constructor() {
         this.rowChanged = new core_1.EventEmitter();
+        this.rowRemoved = new core_1.EventEmitter();
         this.isCallback = true;
         this.displayItems = [];
         this.itemsPerPage = 5;
@@ -78,6 +79,9 @@ let DataTable = class DataTable {
         console.info("rowId{}" + rowId);
         this.rowChanged.emit(this.displayItems[rowId]);
     }
+    removeRow(rowId) {
+        this.rowRemoved.emit(this.displayItems[rowId]);
+    }
 };
 __decorate([
     core_1.Input('itemlist'), 
@@ -99,6 +103,10 @@ __decorate([
     core_1.Output('selectedRow'), 
     __metadata('design:type', core_1.EventEmitter)
 ], DataTable.prototype, "rowChanged", void 0);
+__decorate([
+    core_1.Output('removeRow'), 
+    __metadata('design:type', core_1.EventEmitter)
+], DataTable.prototype, "rowRemoved", void 0);
 __decorate([
     core_1.Input(), 
     __metadata('design:type', Boolean)

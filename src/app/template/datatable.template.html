@@ -10,7 +10,7 @@
 				<tr *ngFor="let item of displayItems;let i=index">
                     <td class="col-xs-2" align="center" *ngIf="iseditable">
 						 <a class="btn btn-default" (click)="selectedRow(i)"><em class="glyphicon glyphicon-edit"></em></a>
-						 <a class="btn btn-danger"><em class="glyphicon glyphicon-trash"></em></a>
+						 <a class="btn btn-danger"  (click)="removeRow(i)"><em class="glyphicon glyphicon-trash"></em></a>
 					</td>
      				<td class="col-xs-2" *ngFor="let col of columns">{{item[col]}}</td>
 				</tr>

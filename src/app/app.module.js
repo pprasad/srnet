@@ -19,11 +19,14 @@ const timepicker_component_1 = require('./internet/timepicker.component');
 const datepicker_component_1 = require('./template/datepicker.component');
 const datatable_component_1 = require('./template/datatable.component');
 const autocomplete_component_1 = require('./template/autocomplete.component');
+const angular2_modal_1 = require('angular2-modal');
+const bootstrap_1 = require('angular2-modal/plugins/bootstrap');
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     core_1.NgModule({
-        imports: [platform_browser_1.BrowserModule, http_1.HttpModule, forms_1.FormsModule, forms_1.ReactiveFormsModule, app_routers_1.app_routing.routes],
+        imports: [platform_browser_1.BrowserModule, http_1.HttpModule, forms_1.FormsModule, forms_1.ReactiveFormsModule, app_routers_1.app_routing.routes, angular2_modal_1.ModalModule.forRoot(),
+            bootstrap_1.BootstrapModalModule],
         providers: [{ provide: common_1.LocationStrategy, useClass: common_1.HashLocationStrategy }],
         declarations: [app_component_1.AppComponent, app_routers_1.app_routing.components, timepicker_component_1.TimePicker, datepicker_component_1.DatepickerComponent, datatable_component_1.DataTable, autocomplete_component_1.AutoComplete],
         bootstrap: [app_component_1.AppComponent]

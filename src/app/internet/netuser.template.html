@@ -5,6 +5,7 @@
   <div class="panel-body">
 	  <div class="alert alert-warning"><strong>Warning!</strong>{{errorMsg}}</div>
 	   <form [formGroup]="userinfoForm" (ngSubmit)="save(userinfoForm)" class="form-horizontal">
+		    <input type="hidden" formControlName="userid">
 			<div class="form-group">
 				<label  for="firstname" class="col-xs-2">Customer Name</label>
 				<div class="col-xs-5">
@@ -28,8 +29,12 @@
 				</div>
             </div>
             <div class="col-xs-10 col-xs-offset-2">
-				<button type="submit" class="btn btn-primary">Submit </button> 
+				<button type="submit" class="btn btn-primary" [disabled]='!userinfoForm.valid'>Submit </button> 
 				<button type="reset" class="btn btn-default">Reset</button>
 			</div>
-      </form>      
+      </form>  
+	   <!--Table Data-->
+  		<datatable  [rows]="rows" [columns]="columns" [itemlist]="users" [iseditable]=true  (selectedRow)="callbackfn($event)"
+		  (removeRow)="removeRow($event)"></datatable>
+  	   <!--End tabledata-->    
   </div>

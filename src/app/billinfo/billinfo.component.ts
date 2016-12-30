@@ -22,16 +22,19 @@ export class BillinfoComponent implements OnInit{
       this.menubar.routeIsChanging(true);
    }
    ngOnInit(){
-       this.billEntryForm=this.fb.group({
+       this.init();
+       this.rows.push(Object.assign({},this.rowtemplate));
+       this.service.getStockwithRates().subscribe(res=>this.stockrates=res);
+       this.userService.getUserList().subscribe(res=>this.users=res);
+   }
+   init(){
+     this.billEntryForm=this.fb.group({
            billno:[''],
            billdate:[''],
            custid:[''],
            totalamt:[0],
            stocksoild:[]
        });
-       this.rows.push(Object.assign({},this.rowtemplate));
-       this.service.getStockwithRates().subscribe(res=>this.stockrates=res);
-       this.userService.getUserList().subscribe(res=>this.users=res);
    }
    selected(event:any,rowId:number):void{
       console.info("Selected Event{}"+event+" index{}"+rowId);
@@ -39,15 +42,19 @@ export class BillinfoComponent implements OnInit{
       this.rows[rowId].rate=event.rate;
    }
    changQtyEvent(event:Event,rowId:number):void{
-       console.info("RowId{}"+rowId);
        let rate=this.rows[rowId].rate;
        let val=event.target.value;
-       console.info("rate{}"+rate);
-       this.rows[rowId].amount=rate*parseInt(val);
-       this.rows[rowId].qty=val;
-       console.info("amount{}"+ this.rows[rowId].amount);
-       let totalamt=this.billEntryForm.value.totalamt;
-       totalamt+=this.rows[rowId].amount;
+       if(!isNaN(val)){
+         this.rows[rowId].amount=rate*parseInt(val);
+         this.rows[rowId].qty=val;
+         this.calculateTotal();
+       }
+    }
+   calculateTotal(){
+       let totalamt=0;
+       for(var row in this.rows){
+             totalamt+=this.rows[row].amount;
+       }
        this.billEntryForm.patchValue({'totalamt':totalamt});
    }
    addRowEvent(){
@@ -71,5 +78,11 @@ export class BillinfoComponent implements OnInit{
        }catch(e){
            console.info("Exception{}"+e);
        }
+   }
+   onReset():void{
+        this.init();
+        this.rows=[];
+        this.rows.push(Object.assign({},this.rowtemplate));
+        this.errorMsg='';
    }
 }
