@@ -18,6 +18,7 @@ let BillService = class BillService {
         this._http = _http;
         this.GET_NEW_BILL_NO_URL = "/api/get/autobillno";
         this.POST_CUST_BILL_INFO = "/api/save/custbillinfo";
+        this.GET_BILL_INFO = "/api/getbilldetails?billno";
     }
     getAutoBillNo() {
         return this._http.get(this.GET_NEW_BILL_NO_URL).map(res => res.json()).catch(this.handleError);
@@ -27,6 +28,9 @@ let BillService = class BillService {
         headers.append('Content-Type', 'application/json');
         console.info("model" + model);
         return this._http.post(this.POST_CUST_BILL_INFO, model, { headers }).map(res => res).catch(this.handleError);
+    }
+    getbillinfo(billno) {
+        return this._http.get(this.GET_BILL_INFO + "=" + billno).map(res => res.json()).catch(this.handleError);
     }
     handleError(error) {
         let errMsg = (error.message) ? error.message :

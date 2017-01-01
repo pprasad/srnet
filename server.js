@@ -338,6 +338,19 @@ app.post('/api/save/custbillinfo',function(req,res){
            }
     });
 })
+/*get existing billing information*/
+app.get('/api/getbilldetails',function(req,res){
+    var billinfos={};
+    var sql="SELECT * FROM CUSTOMER_BILL WHERE BILL_NO=?";
+    var params=[req.query.billno];
+    global.client.query(sql,params,function(err,rows){
+           billinfos.billno=rows[0].BILL_NO;
+           billinfos.billdate=dateFormat(rows[0].BILL_DATE,"mm/dd/yyyy");
+           billinfos.custid=rows[0].CUST_ID;
+           billinfos.totalamt=rows[0].TOTAL_AMT;
+           res.send(billinfos);
+    });
+});
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });

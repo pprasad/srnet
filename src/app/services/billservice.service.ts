@@ -8,6 +8,7 @@ import 'rxjs/add/operator/catch';
 export class BillService{
     private GET_NEW_BILL_NO_URL="/api/get/autobillno";
     private POST_CUST_BILL_INFO="/api/save/custbillinfo";
+    private GET_BILL_INFO="/api/getbilldetails?billno";
 
     constructor(public _http: Http) { }
 
@@ -19,6 +20,9 @@ export class BillService{
              headers.append('Content-Type', 'application/json');
              console.info("model"+model);
              return this._http.post(this.POST_CUST_BILL_INFO,model,{headers}).map(res=>res).catch(this.handleError);
+    }
+    public getbillinfo(billno:number){
+            return this._http.get(this.GET_BILL_INFO+"="+billno).map(res=><number>res.json()).catch(this.handleError); 
     }
     private handleError (error: any) {
        let errMsg = (error.message) ? error.message :

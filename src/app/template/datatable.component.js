@@ -32,10 +32,9 @@ let DataTable = class DataTable {
             this.isCallback = false;
             length = this.itemlist.length;
             this.totalSize = this.itemlist.length;
-            this.totalPages = Math.floor(this.totalSize / this.itemsPerPage);
+            this.totalPages = Math.ceil(this.totalSize / this.itemsPerPage);
             this.totalPages = (this.totalPages == 0) ? (this.totalPages += 1) : this.totalPages;
             this.viewUpdateModel(this.currentPage);
-            console.info("Hello.........." + this.isCallback);
         }
     }
     writeValue(value) { }
@@ -45,8 +44,6 @@ let DataTable = class DataTable {
         let startIndex = page * this.itemsPerPage;
         let endIndex = startIndex + this.itemsPerPage;
         this.displayItems = [];
-        console.info("startIndex{}" + startIndex);
-        console.info("endIndex{}" + endIndex);
         for (let i = startIndex; i < endIndex; i++) {
             if (this.itemlist[i] != undefined) {
                 this.displayItems.push(this.itemlist[i]);

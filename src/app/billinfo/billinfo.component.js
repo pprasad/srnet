@@ -91,6 +91,11 @@ let BillinfoComponent = class BillinfoComponent {
         this.rows.push(Object.assign({}, this.rowtemplate));
         this.errorMsg = '';
     }
+    onSearch() {
+        let billno = this.billEntryForm.value.billno;
+        let obj = this.billEntryForm;
+        this.billService.getbillinfo(billno).subscribe(res => obj.patchValue({ billdate: res.billdate, custid: res.custid }));
+    }
 };
 BillinfoComponent = __decorate([
     core_1.Component({

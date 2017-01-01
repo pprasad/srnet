@@ -85,4 +85,11 @@ export class BillinfoComponent implements OnInit{
         this.rows.push(Object.assign({},this.rowtemplate));
         this.errorMsg='';
    }
+   onSearch():void{
+       let billno=this.billEntryForm.value.billno;
+       let obj=this.billEntryForm;
+       this.billService.getbillinfo(billno).subscribe(res=>
+          obj.patchValue({billdate:res.billdate,custid:res.custid})
+       );
+   }
 }

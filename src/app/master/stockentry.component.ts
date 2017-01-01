@@ -52,7 +52,7 @@ export class StockEntryComponent implements OnInit{
     }
     onItemPriceChange(event:Event){
         let val=event.target.value;
-        if(isNaN(val)){
+        if(!isNaN(val)){
             let total=parseInt(this.stockEntryForm.value.itemqty)*parseInt(val);
             this.stockEntryForm.patchValue({totalprice:total});
         }
