@@ -64,10 +64,10 @@
                                             <label>{{i+1}}</label> 
                                         </td>     
                                         <td>
-                                            <autocomplete [itemlist]="stockrates" (textChange)="selected($event,i)"></autocomplete>
+                                            <autocomplete  [filterKey]="row.itemname" [itemlist]="stockrates" (textChange)="selected($event,i)"></autocomplete>
                                         </td>
                                         <td>
-                                            <input type="text" (blur)="changQtyEvent($event,i)">
+                                            <input type="text" value="{{row.qty}}" (blur)="changQtyEvent($event,i)">
                                         </td> 
                                             <td>
                                             <input type="text" value="{{row.rate}}">

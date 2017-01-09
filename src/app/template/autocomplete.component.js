@@ -37,6 +37,10 @@ var AutoComplete = (function () {
         __metadata('design:type', Array)
     ], AutoComplete.prototype, "itemlist", void 0);
     __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], AutoComplete.prototype, "filterKey", void 0);
+    __decorate([
         core_1.Output(), 
         __metadata('design:type', core_1.EventEmitter)
     ], AutoComplete.prototype, "textChange", void 0);

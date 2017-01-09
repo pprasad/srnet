@@ -54,7 +54,7 @@ var BillinfoComponent = (function () {
         var val = event.target.value;
         if (!isNaN(val)) {
             this.rows[rowId].amount = rate * parseInt(val);
-            this.rows[rowId].qty = val;
+            this.rows[rowId].qty = parseInt(val);
             this.calculateTotal();
             this.updateModal();
         }
@@ -100,10 +100,12 @@ var BillinfoComponent = (function () {
         this.errorMsg = '';
     };
     BillinfoComponent.prototype.onSearch = function () {
+        var _this = this;
         var billno = this.billEntryForm.value.billno;
         var obj = this.billEntryForm;
         this.billService.getbillinfo(billno).subscribe(function (res) {
-            return obj.patchValue({ billdate: res.billdate, custid: res.custid });
+            obj.patchValue({ billdate: res.billdate, custid: res.custid, stocksoild: res.stocksoild, totalamt: res.totalamt });
+            _this.rows = res.stocksoild;
         });
     };
     BillinfoComponent.prototype.custidChangeEvent = function (event) {

@@ -9,6 +9,7 @@ export class AutoComplete{
     @Input()
     public itemlist:any[]; 
     //CREATED THE VARIABLES FILTEREDITEMS AND REFELEMENT
+    @Input()
     public filterKey = '';
     public filteredItems:any[]=[];
     @Output()

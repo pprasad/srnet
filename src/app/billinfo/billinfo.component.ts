@@ -48,7 +48,7 @@ export class BillinfoComponent implements OnInit{
        let val=event.target.value;
        if(!isNaN(val)){
          this.rows[rowId].amount=rate*parseInt(val);
-         this.rows[rowId].qty=val;
+         this.rows[rowId].qty=parseInt(val);
          this.calculateTotal();
          this.updateModal();
        }
@@ -93,8 +93,10 @@ export class BillinfoComponent implements OnInit{
    onSearch():void{
        let billno=this.billEntryForm.value.billno;
        let obj=this.billEntryForm;
-       this.billService.getbillinfo(billno).subscribe(res=>
-          obj.patchValue({billdate:res.billdate,custid:res.custid})
+       this.billService.getbillinfo(billno).subscribe(res=>{
+          obj.patchValue({billdate:res.billdate,custid:res.custid,stocksoild:res.stocksoild,totalamt:res.totalamt});
+           this.rows=res.stocksoild;
+          }
        );
    }
    custidChangeEvent(event:any):void{

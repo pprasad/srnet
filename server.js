@@ -332,7 +332,9 @@ app.post('/api/save/custbillinfo',function(req,res){
                for(var index in soildObjs){
                     var soild=soildObjs[index];   
                     params=[obj.billno,soild.itemcode,soild.qty,soild.rate,soild.amount];
-                    global.client.query(sql,params);
+                    global.client.query(sql,params,function(err,rows){
+                        if(err)res.send(err);console.info(err);
+                    });
                }
                res.send("Successfully Saved");
            }
@@ -341,6 +343,7 @@ app.post('/api/save/custbillinfo',function(req,res){
 /*get existing billing information*/
 app.get('/api/getbilldetails',function(req,res){
     var billinfos={};
+    billinfos.stocksoild=[];
     var sql="SELECT * FROM CUSTOMER_BILL WHERE BILL_NO=?";
     var params=[req.query.billno];
     global.client.query(sql,params,function(err,rows){
@@ -348,7 +351,21 @@ app.get('/api/getbilldetails',function(req,res){
            billinfos.billdate=dateFormat(rows[0].BILL_DATE,"mm/dd/yyyy");
            billinfos.custid=rows[0].CUST_ID;
            billinfos.totalamt=rows[0].TOTAL_AMT;
-           res.send(billinfos);
+           sql="SELECT * FROM STOCK_SOILD ST JOIN ITEM_MASTER ITM ON  ITM.ITEM_CODE=ST.ITEM_CODE WHERE ST.BILL_NO=?";
+           global.client.query(sql,params,function(err,rows){
+                for(var row in rows){
+                   var stocks={};
+                   stocks.id=rows[row].SOILD_ID;
+                   stocks.itemcode=rows[row].ITEM_CODE;
+                   stocks.itemname=rows[row].ITEM_NAME;
+                   stocks.qty=rows[row].QTY;
+                   stocks.rate=rows[row].RATE;
+                   stocks.amount=rows[row].AMOUNT;
+                   console.info(stocks);
+                   billinfos.stocksoild.push(stocks);
+                }
+                res.send(billinfos);
+           });
     });
 });
 http.createServer(app).listen(app.get('port'), function(){
