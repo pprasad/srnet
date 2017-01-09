@@ -8,14 +8,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-const core_1 = require('@angular/core');
-const forms_1 = require('@angular/forms');
-const itemmaster_service_1 = require('../services/itemmaster.service');
-const newuser_service_1 = require('../services/newuser.service');
-const billservice_service_1 = require('../services/billservice.service');
-const service_menubar_1 = require('../services/service.menubar');
-let BillinfoComponent = class BillinfoComponent {
-    constructor(fb, service, userService, billService, menubar) {
+var core_1 = require('@angular/core');
+var forms_1 = require('@angular/forms');
+var itemmaster_service_1 = require('../services/itemmaster.service');
+var newuser_service_1 = require('../services/newuser.service');
+var billservice_service_1 = require('../services/billservice.service');
+var service_menubar_1 = require('../services/service.menubar');
+var BillinfoComponent = (function () {
+    function BillinfoComponent(fb, service, userService, billService, menubar) {
         this.fb = fb;
         this.service = service;
         this.userService = userService;
@@ -23,87 +23,105 @@ let BillinfoComponent = class BillinfoComponent {
         this.menubar = menubar;
         this.rows = [];
         this.stockrates = [];
-        this.rowtemplate = { "id": '', "itemcode": '', "qty": 0, "rate": 0, "amount": 0 };
+        this.rowtemplate = { "id": '', "itemcode": '', "itemname": '', "qty": 0, "rate": 0, "amount": 0 };
         this.menubar.routeIsChanging(true);
     }
-    ngOnInit() {
+    BillinfoComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.init();
         this.rows.push(Object.assign({}, this.rowtemplate));
-        this.service.getStockwithRates().subscribe(res => this.stockrates = res);
-        this.userService.getUserList().subscribe(res => this.users = res);
-    }
-    init() {
+        this.service.getStockwithRates().subscribe(function (res) { return _this.stockrates = res; });
+        this.userService.getUserList().subscribe(function (res) { return _this.users = res; });
+    };
+    BillinfoComponent.prototype.init = function () {
         this.billEntryForm = this.fb.group({
             billno: [''],
             billdate: [''],
             custid: [''],
+            custname: [''],
             totalamt: [0],
             stocksoild: []
         });
-    }
-    selected(event, rowId) {
+    };
+    BillinfoComponent.prototype.selected = function (event, rowId) {
         console.info("Selected Event{}" + event + " index{}" + rowId);
         this.rows[rowId].itemcode = event.code;
+        this.rows[rowId].itemname = event.name;
         this.rows[rowId].rate = event.rate;
-    }
-    changQtyEvent(event, rowId) {
-        let rate = this.rows[rowId].rate;
-        let val = event.target.value;
+    };
+    BillinfoComponent.prototype.changQtyEvent = function (event, rowId) {
+        var rate = this.rows[rowId].rate;
+        var val = event.target.value;
         if (!isNaN(val)) {
             this.rows[rowId].amount = rate * parseInt(val);
             this.rows[rowId].qty = val;
             this.calculateTotal();
+            this.updateModal();
         }
-    }
-    calculateTotal() {
-        let totalamt = 0;
+    };
+    BillinfoComponent.prototype.calculateTotal = function () {
+        var totalamt = 0;
         for (var row in this.rows) {
             totalamt += this.rows[row].amount;
         }
         this.billEntryForm.patchValue({ 'totalamt': totalamt });
-    }
-    addRowEvent() {
-        let rowObj = Object.assign({}, this.rowtemplate);
+    };
+    BillinfoComponent.prototype.addRowEvent = function () {
+        var rowObj = Object.assign({}, this.rowtemplate);
         this.rows.push(rowObj);
-    }
-    deleteRowEvent(rowId) {
-        let totalamt = this.billEntryForm.value.totalamt;
+        this.updateModal();
+    };
+    BillinfoComponent.prototype.deleteRowEvent = function (rowId) {
+        var totalamt = this.billEntryForm.value.totalamt;
         totalamt -= this.rows[rowId].amount;
         this.billEntryForm.patchValue({ 'totalamt': totalamt });
         this.rows.splice(rowId, 1);
-    }
-    newBillNo() {
-        this.billService.getAutoBillNo().subscribe(res => this.billEntryForm.patchValue({ "billno": res.BILLNO != null ? res.BILLNO : 1 }));
-    }
-    save(model) {
+        this.updateModal();
+    };
+    BillinfoComponent.prototype.newBillNo = function () {
+        var _this = this;
+        this.billService.getAutoBillNo().subscribe(function (res) { return _this.billEntryForm.patchValue({ "billno": res.BILLNO != null ? res.BILLNO : 1 }); });
+    };
+    BillinfoComponent.prototype.save = function (model) {
+        var _this = this;
         try {
             model.patchValue({ "stocksoild": this.rows });
-            let data = JSON.stringify(model.value);
-            this.billService.savebillinfo(data).subscribe(res => this.errorMsg = res._body, error => this.errorMsg = error);
+            var data = JSON.stringify(model.value);
+            this.billService.savebillinfo(data).subscribe(function (res) { return _this.errorMsg = res._body; }, function (error) { return _this.errorMsg = error; });
         }
         catch (e) {
             console.info("Exception{}" + e);
         }
-    }
-    onReset() {
+    };
+    BillinfoComponent.prototype.onReset = function () {
         this.init();
         this.rows = [];
         this.rows.push(Object.assign({}, this.rowtemplate));
         this.errorMsg = '';
-    }
-    onSearch() {
-        let billno = this.billEntryForm.value.billno;
-        let obj = this.billEntryForm;
-        this.billService.getbillinfo(billno).subscribe(res => obj.patchValue({ billdate: res.billdate, custid: res.custid }));
-    }
-};
-BillinfoComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        templateUrl: 'billinfo.template.html',
-        providers: [itemmaster_service_1.ItemMasterService, newuser_service_1.NewUserService, billservice_service_1.BillService]
-    }), 
-    __metadata('design:paramtypes', [forms_1.FormBuilder, itemmaster_service_1.ItemMasterService, newuser_service_1.NewUserService, billservice_service_1.BillService, service_menubar_1.MenuBarService])
-], BillinfoComponent);
+    };
+    BillinfoComponent.prototype.onSearch = function () {
+        var billno = this.billEntryForm.value.billno;
+        var obj = this.billEntryForm;
+        this.billService.getbillinfo(billno).subscribe(function (res) {
+            return obj.patchValue({ billdate: res.billdate, custid: res.custid });
+        });
+    };
+    BillinfoComponent.prototype.custidChangeEvent = function (event) {
+        var index = event.target.selectedIndex;
+        this.billEntryForm.patchValue({ custname: event.target[index].text });
+    };
+    BillinfoComponent.prototype.updateModal = function () {
+        this.billEntryForm.patchValue({ "stocksoild": this.rows });
+    };
+    BillinfoComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            templateUrl: 'billinfo.template.html',
+            providers: [itemmaster_service_1.ItemMasterService, newuser_service_1.NewUserService, billservice_service_1.BillService]
+        }), 
+        __metadata('design:paramtypes', [forms_1.FormBuilder, itemmaster_service_1.ItemMasterService, newuser_service_1.NewUserService, billservice_service_1.BillService, service_menubar_1.MenuBarService])
+    ], BillinfoComponent);
+    return BillinfoComponent;
+}());
 exports.BillinfoComponent = BillinfoComponent;
 //# sourceMappingURL=billinfo.component.js.map

@@ -16,7 +16,7 @@ export class BillinfoComponent implements OnInit{
    rows:any[]=[];
    stockrates:any[]=[];
    users:User[];
-   rowtemplate={"id":'',"itemcode":'',"qty":0,"rate":0,"amount":0}
+   rowtemplate={"id":'',"itemcode":'',"itemname":'',"qty":0,"rate":0,"amount":0}
    constructor(private fb:FormBuilder,private service:ItemMasterService,private userService:NewUserService,
    private billService:BillService,private menubar:MenuBarService){
       this.menubar.routeIsChanging(true);
@@ -32,6 +32,7 @@ export class BillinfoComponent implements OnInit{
            billno:[''],
            billdate:[''],
            custid:[''],
+           custname:[''],
            totalamt:[0],
            stocksoild:[]
        });
@@ -39,6 +40,7 @@ export class BillinfoComponent implements OnInit{
    selected(event:any,rowId:number):void{
       console.info("Selected Event{}"+event+" index{}"+rowId);
       this.rows[rowId].itemcode=event.code;
+      this.rows[rowId].itemname=event.name;
       this.rows[rowId].rate=event.rate;
    }
    changQtyEvent(event:Event,rowId:number):void{
@@ -48,6 +50,7 @@ export class BillinfoComponent implements OnInit{
          this.rows[rowId].amount=rate*parseInt(val);
          this.rows[rowId].qty=val;
          this.calculateTotal();
+         this.updateModal();
        }
     }
    calculateTotal(){
@@ -60,12 +63,14 @@ export class BillinfoComponent implements OnInit{
    addRowEvent(){
       let rowObj=Object.assign({},this.rowtemplate);
       this.rows.push(rowObj);
+      this.updateModal();
    }
    deleteRowEvent(rowId:number){
         let totalamt=this.billEntryForm.value.totalamt;
         totalamt-=this.rows[rowId].amount;
         this.billEntryForm.patchValue({'totalamt':totalamt});
         this.rows.splice(rowId,1);
+        this.updateModal();
    }
    newBillNo(){
         this.billService.getAutoBillNo().subscribe(res=>this.billEntryForm.patchValue({"billno":res.BILLNO!=null?res.BILLNO:1}));
@@ -91,5 +96,12 @@ export class BillinfoComponent implements OnInit{
        this.billService.getbillinfo(billno).subscribe(res=>
           obj.patchValue({billdate:res.billdate,custid:res.custid})
        );
+   }
+   custidChangeEvent(event:any):void{
+        let index=event.target.selectedIndex;
+        this.billEntryForm.patchValue({custname:event.target[index].text});
+   }
+   updateModal(){
+       this.billEntryForm.patchValue({"stocksoild":this.rows});
    }
 }

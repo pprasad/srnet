@@ -8,13 +8,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-const core_1 = require('@angular/core');
-const forms_1 = require('@angular/forms');
-const service_menubar_1 = require('../services/service.menubar');
-const newuser_service_1 = require('../services/newuser.service');
-const bootstrap_1 = require('angular2-modal/plugins/bootstrap');
-let SystemComponent = class SystemComponent {
-    constructor(menuBarService, fb, service, vcRef, modal) {
+var core_1 = require('@angular/core');
+var forms_1 = require('@angular/forms');
+var service_menubar_1 = require('../services/service.menubar');
+var newuser_service_1 = require('../services/newuser.service');
+var bootstrap_1 = require('angular2-modal/plugins/bootstrap');
+var SystemComponent = (function () {
+    function SystemComponent(menuBarService, fb, service, vcRef, modal) {
         this.menuBarService = menuBarService;
         this.fb = fb;
         this.service = service;
@@ -23,14 +23,15 @@ let SystemComponent = class SystemComponent {
         this.modal.overlay.defaultViewContainer = vcRef;
         this.menuBarService.routeIsChanging(true);
     }
-    ngOnInit() {
+    SystemComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.init();
         this.rows = ['SystemId', 'Date', 'UserId', 'SysNo', 'Hours/Mins', 'StartTime', 'EndTime', 'Amount'];
         this.columns = ['sysid', 'sysdate', 'userid', 'sysno', 'syshour', 'starttime', 'endtime', 'amount'];
-        this.service.getUserList().subscribe(res => this.users = res);
+        this.service.getUserList().subscribe(function (res) { return _this.users = res; });
         this.updateTable(this.systemForm);
-    }
-    init() {
+    };
+    SystemComponent.prototype.init = function () {
         this.systemForm = this.fb.group({
             sysid: [''],
             userid: ['', forms_1.Validators.required],
@@ -43,25 +44,27 @@ let SystemComponent = class SystemComponent {
             paidamt: [0, forms_1.Validators.required],
             balance: [0, forms_1.Validators.required]
         });
-    }
-    save(model) {
-        let data = JSON.stringify(model.value);
-        this.service.savesysinfo(data).subscribe(res => { this.errorMsg = res._body; this.updateTable(model); }, error => this.errorMsg = error);
-    }
-    onDateChanged(event) {
-        let date = event.date;
+    };
+    SystemComponent.prototype.save = function (model) {
+        var _this = this;
+        var data = JSON.stringify(model.value);
+        this.service.savesysinfo(data).subscribe(function (res) { _this.errorMsg = res._body; _this.updateTable(model); }, function (error) { return _this.errorMsg = error; });
+    };
+    SystemComponent.prototype.onDateChanged = function (event) {
+        var date = event.date;
         this.systemForm.value.sysdate = date.year + "-" + date.month + "-" + date.day;
-    }
-    onUserChanged(event) {
+    };
+    SystemComponent.prototype.onUserChanged = function (event) {
         this.systemForm.value.userid = event.target.value;
-    }
-    onSystemChanged(event) {
+    };
+    SystemComponent.prototype.onSystemChanged = function (event) {
         this.systemForm.value.sysno = event.target.value;
-    }
-    updateTable(model) {
-        let obj = model.value;
+    };
+    SystemComponent.prototype.updateTable = function (model) {
+        var _this = this;
+        var obj = model.value;
         if (obj.sysid == null || obj.sysid == '') {
-            this.service.getsysinfo().subscribe(res => this.sysinfos = res);
+            this.service.getsysinfo().subscribe(function (res) { return _this.sysinfos = res; });
         }
         else {
             this.object.userid = obj.userid;
@@ -74,8 +77,8 @@ let SystemComponent = class SystemComponent {
             this.object.paidamt = obj.paidamt;
             this.object.balance = obj.balance;
         }
-    }
-    callbackfn(event) {
+    };
+    SystemComponent.prototype.callbackfn = function (event) {
         this.object = event;
         this.systemForm.patchValue({ sysid: this.object.sysid,
             userid: this.object.userid, sysno: this.object.sysno,
@@ -84,32 +87,35 @@ let SystemComponent = class SystemComponent {
             amount: this.object.amount, paidamt: this.object.paidamt,
             balance: this.object.balance
         });
-    }
-    removeRow(event) {
-        let val = this.modal.confirm()
+    };
+    SystemComponent.prototype.removeRow = function (event) {
+        var _this = this;
+        var val = this.modal.confirm()
             .size('sm')
             .showClose(true)
             .title("Waring Message")
             .body('Do you what Delete Record?')
-            .open().then(dialog => dialog.result)
-            .then(result => this.searchAndRemove(event))
-            .catch(err => console.info("Cancel...."));
-    }
-    searchAndRemove(obj) {
-        this.service.deletesysinfo(obj.sysid).subscribe(res => this.updateTable(this.systemForm));
-    }
-    onReset() {
+            .open().then(function (dialog) { return dialog.result; })
+            .then(function (result) { return _this.searchAndRemove(event); })
+            .catch(function (err) { return console.info("Cancel...."); });
+    };
+    SystemComponent.prototype.searchAndRemove = function (obj) {
+        var _this = this;
+        this.service.deletesysinfo(obj.sysid).subscribe(function (res) { return _this.updateTable(_this.systemForm); });
+    };
+    SystemComponent.prototype.onReset = function () {
         this.init();
         this.errorMsg = '';
-    }
-};
-SystemComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        templateUrl: 'system.template.html',
-        providers: [newuser_service_1.NewUserService, bootstrap_1.Modal]
-    }), 
-    __metadata('design:paramtypes', [service_menubar_1.MenuBarService, forms_1.FormBuilder, newuser_service_1.NewUserService, core_1.ViewContainerRef, bootstrap_1.Modal])
-], SystemComponent);
+    };
+    SystemComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            templateUrl: 'system.template.html',
+            providers: [newuser_service_1.NewUserService, bootstrap_1.Modal]
+        }), 
+        __metadata('design:paramtypes', [service_menubar_1.MenuBarService, forms_1.FormBuilder, newuser_service_1.NewUserService, core_1.ViewContainerRef, bootstrap_1.Modal])
+    ], SystemComponent);
+    return SystemComponent;
+}());
 exports.SystemComponent = SystemComponent;
 //# sourceMappingURL=system.component.js.map

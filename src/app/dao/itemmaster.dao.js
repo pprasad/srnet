@@ -1,5 +1,8 @@
 "use strict";
-class ItemMaster {
-}
+var ItemMaster = (function () {
+    function ItemMaster() {
+    }
+    return ItemMaster;
+}());
 exports.ItemMaster = ItemMaster;
 //# sourceMappingURL=itemmaster.dao.js.map

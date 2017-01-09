@@ -8,13 +8,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-const core_1 = require('@angular/core');
-const http_1 = require('@angular/http');
-const Rx_1 = require('rxjs/Rx');
+var core_1 = require('@angular/core');
+var http_1 = require('@angular/http');
+var Rx_1 = require('rxjs/Rx');
 require('rxjs/add/operator/map');
 require('rxjs/add/operator/catch');
-let ItemMasterService = class ItemMasterService {
-    constructor(_http) {
+var ItemMasterService = (function () {
+    function ItemMasterService(_http) {
         this._http = _http;
         this.GET_URL = "/api/getitemmaster";
         this.SAVE_URL = "/api/saveitemmaster";
@@ -25,47 +25,48 @@ let ItemMasterService = class ItemMasterService {
         this.DELETE_ITEM_URL = "/api/delete/item?itemid";
         this.DELETE_STOCK_URL = "/api/delete/stock?stockid";
     }
-    getList() {
+    ItemMasterService.prototype.getList = function () {
         console.info("============Gelist====================");
-        return this._http.get(this.GET_URL).map(res => res.json()).catch(this.handleError);
-    }
-    save(model) {
-        let headers = new http_1.Headers();
+        return this._http.get(this.GET_URL).map(function (res) { return res.json(); }).catch(this.handleError);
+    };
+    ItemMasterService.prototype.save = function (model) {
+        var headers = new http_1.Headers();
         headers.append('Content-Type', 'application/json');
         console.info("model" + model);
-        return this._http.post(this.SAVE_URL, model, { headers }).map(res => res).catch(this.handleError);
-    }
-    getItemCodes() {
-        return this._http.get(this.GET_ITEM_CODES).map(res => res.json()).catch(this.handleError);
-    }
-    saveStock(model) {
-        let headers = new http_1.Headers();
+        return this._http.post(this.SAVE_URL, model, { headers: headers }).map(function (res) { return res; }).catch(this.handleError);
+    };
+    ItemMasterService.prototype.getItemCodes = function () {
+        return this._http.get(this.GET_ITEM_CODES).map(function (res) { return res.json(); }).catch(this.handleError);
+    };
+    ItemMasterService.prototype.saveStock = function (model) {
+        var headers = new http_1.Headers();
         headers.append('Content-Type', 'application/json');
         console.info("model" + model);
-        return this._http.post(this.SAVE_STOCK_URL, model, { headers }).map(res => res).catch(this.handleError);
-    }
-    getStockList() {
-        return this._http.get(this.GET_STOCK_URL).map(res => res.json()).catch(this.handleError);
-    }
-    getStockwithRates() {
-        return this._http.get(this.GET_STOCK_RATES_URL).map(res => res.json()).catch(this.handleError);
-    }
-    deleteitem(itemid) {
-        return this._http.delete(this.DELETE_ITEM_URL + "=" + itemid).map(res => res).catch(this.handleError);
-    }
-    deletestock(stockid) {
-        return this._http.delete(this.DELETE_STOCK_URL + "=" + stockid).map(res => res).catch(this.handleError);
-    }
-    handleError(error) {
-        let errMsg = (error.message) ? error.message :
-            error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+        return this._http.post(this.SAVE_STOCK_URL, model, { headers: headers }).map(function (res) { return res; }).catch(this.handleError);
+    };
+    ItemMasterService.prototype.getStockList = function () {
+        return this._http.get(this.GET_STOCK_URL).map(function (res) { return res.json(); }).catch(this.handleError);
+    };
+    ItemMasterService.prototype.getStockwithRates = function () {
+        return this._http.get(this.GET_STOCK_RATES_URL).map(function (res) { return res.json(); }).catch(this.handleError);
+    };
+    ItemMasterService.prototype.deleteitem = function (itemid) {
+        return this._http.delete(this.DELETE_ITEM_URL + "=" + itemid).map(function (res) { return res; }).catch(this.handleError);
+    };
+    ItemMasterService.prototype.deletestock = function (stockid) {
+        return this._http.delete(this.DELETE_STOCK_URL + "=" + stockid).map(function (res) { return res; }).catch(this.handleError);
+    };
+    ItemMasterService.prototype.handleError = function (error) {
+        var errMsg = (error.message) ? error.message :
+            error.status ? error.status + " - " + error.statusText : 'Server error';
         console.error(errMsg);
         return Rx_1.Observable.throw(errMsg);
-    }
-};
-ItemMasterService = __decorate([
-    core_1.Injectable(), 
-    __metadata('design:paramtypes', [http_1.Http])
-], ItemMasterService);
+    };
+    ItemMasterService = __decorate([
+        core_1.Injectable(), 
+        __metadata('design:paramtypes', [http_1.Http])
+    ], ItemMasterService);
+    return ItemMasterService;
+}());
 exports.ItemMasterService = ItemMasterService;
 //# sourceMappingURL=itemmaster.service.js.map

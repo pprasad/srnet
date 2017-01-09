@@ -1,25 +1,26 @@
 "use strict";
-class UserLogin {
-    constructor() {
+var UserLogin = (function () {
+    function UserLogin() {
     }
-    setUserId(userId) {
+    UserLogin.prototype.setUserId = function (userId) {
         this.userId = userId;
-    }
-    getUserId() {
+    };
+    UserLogin.prototype.getUserId = function () {
         return this.userId;
-    }
-    setUserName(userName) {
+    };
+    UserLogin.prototype.setUserName = function (userName) {
         this.userName = userName;
-    }
-    getUserName() {
+    };
+    UserLogin.prototype.getUserName = function () {
         return this.userName;
-    }
-    setUserPwd(userPwd) {
+    };
+    UserLogin.prototype.setUserPwd = function (userPwd) {
         this.userPwd = userPwd;
-    }
-    getUserPwd() {
+    };
+    UserLogin.prototype.getUserPwd = function () {
         return this.userPwd;
-    }
-}
+    };
+    return UserLogin;
+}());
 exports.UserLogin = UserLogin;
 //# sourceMappingURL=dao.userlogin.js.map

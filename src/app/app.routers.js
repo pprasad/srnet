@@ -1,13 +1,13 @@
 "use strict";
-const router_1 = require('@angular/router');
-const login_component_1 = require('./login/login.component');
-const home_component_1 = require('./home/home.component');
-const itemmaster_component_1 = require('./master/itemmaster.component');
-const netuser_component_1 = require('./internet/netuser.component');
-const system_component_1 = require('./internet/system.component');
-const stockentry_component_1 = require('./master/stockentry.component');
-const billinfo_component_1 = require('./billinfo/billinfo.component');
-const app_routes = [
+var router_1 = require('@angular/router');
+var login_component_1 = require('./login/login.component');
+var home_component_1 = require('./home/home.component');
+var itemmaster_component_1 = require('./master/itemmaster.component');
+var netuser_component_1 = require('./internet/netuser.component');
+var system_component_1 = require('./internet/system.component');
+var stockentry_component_1 = require('./master/stockentry.component');
+var billinfo_component_1 = require('./billinfo/billinfo.component');
+var app_routes = [
     { path: '', pathMatch: 'full', redirectTo: '/login' },
     { path: 'login', component: login_component_1.LoginComponent },
     { path: 'home', component: home_component_1.HomeComponent },

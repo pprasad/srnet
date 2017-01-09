@@ -16,7 +16,6 @@ export class AutoComplete{
     filter():void{
        if (this.filterKey !== ''){
             this.filteredItems = this.itemlist.filter(function(e:any){
-                console.info(e.name);
                return (e.name.toLowerCase().substr(0, this.filterKey.length) ==
                 this.filterKey.toLowerCase()) == true;
             }.bind(this));

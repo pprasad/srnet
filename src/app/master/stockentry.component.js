@@ -8,13 +8,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-const core_1 = require('@angular/core');
-const forms_1 = require('@angular/forms');
-const service_menubar_1 = require('../services/service.menubar');
-const itemmaster_service_1 = require('../services/itemmaster.service');
-const bootstrap_1 = require('angular2-modal/plugins/bootstrap');
-let StockEntryComponent = class StockEntryComponent {
-    constructor(menuBarService, fb, service, vcRef, modal) {
+var core_1 = require('@angular/core');
+var forms_1 = require('@angular/forms');
+var service_menubar_1 = require('../services/service.menubar');
+var itemmaster_service_1 = require('../services/itemmaster.service');
+var bootstrap_1 = require('angular2-modal/plugins/bootstrap');
+var StockEntryComponent = (function () {
+    function StockEntryComponent(menuBarService, fb, service, vcRef, modal) {
         this.menuBarService = menuBarService;
         this.fb = fb;
         this.service = service;
@@ -25,7 +25,8 @@ let StockEntryComponent = class StockEntryComponent {
         this.modal.overlay.defaultViewContainer = vcRef;
         this.menuBarService.routeIsChanging(true);
     }
-    ngOnInit() {
+    StockEntryComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.stockEntryForm = this.fb.group({
             stockid: [''],
             stockdate: ['', forms_1.Validators.required],
@@ -37,26 +38,28 @@ let StockEntryComponent = class StockEntryComponent {
             totalprice: [0],
             adjqty: [0]
         });
-        this.service.getItemCodes().subscribe(res => this.itemMasters = res);
+        this.service.getItemCodes().subscribe(function (res) { return _this.itemMasters = res; });
         this.rows = ['StockId', 'Date', 'ItemCode', 'Unit', 'Quantity', 'Price', 'Rate', 'Amount'];
         this.columns = ['stockid', 'stockdate', 'itemcode', 'stockunit', 'itemqty', 'itemprice', 'itemrate', 'totalprice'];
         this.updatetableModel(this.stockEntryForm);
-    }
-    save(model) {
-        let data = JSON.stringify(model.value);
-        this.service.saveStock(data).subscribe(res => { this.errorMsg = res._body; this.updatetableModel(model); }, error => this.errorMsg = error);
-    }
-    onItemPriceChange(event) {
-        let val = event.target.value;
+    };
+    StockEntryComponent.prototype.save = function (model) {
+        var _this = this;
+        var data = JSON.stringify(model.value);
+        this.service.saveStock(data).subscribe(function (res) { _this.errorMsg = res._body; _this.updatetableModel(model); }, function (error) { return _this.errorMsg = error; });
+    };
+    StockEntryComponent.prototype.onItemPriceChange = function (event) {
+        var val = event.target.value;
         if (!isNaN(val)) {
-            let total = parseInt(this.stockEntryForm.value.itemqty) * parseInt(val);
+            var total = parseInt(this.stockEntryForm.value.itemqty) * parseInt(val);
             this.stockEntryForm.patchValue({ totalprice: total });
         }
-    }
-    updatetableModel(model) {
-        let obj = model.value;
+    };
+    StockEntryComponent.prototype.updatetableModel = function (model) {
+        var _this = this;
+        var obj = model.value;
         if (obj.stockid == '') {
-            this.service.getStockList().subscribe(res => this.stockentrys = res);
+            this.service.getStockList().subscribe(function (res) { return _this.stockentrys = res; });
         }
         else {
             this.callObject.stockid = obj.stockid;
@@ -68,8 +71,8 @@ let StockEntryComponent = class StockEntryComponent {
             this.callObject.itemrate = obj.itemrate;
             this.callObject.totalprice = obj.totalprice;
         }
-    }
-    callbackfn(event) {
+    };
+    StockEntryComponent.prototype.callbackfn = function (event) {
         if (event != null) {
             this.callObject = event;
             this.adjQty = this.stockEntryForm.value.itemqty;
@@ -85,32 +88,35 @@ let StockEntryComponent = class StockEntryComponent {
                 adjqty: this.callObject.itemqty
             });
         }
-    }
-    removeRow(event) {
-        let val = this.modal.confirm()
+    };
+    StockEntryComponent.prototype.removeRow = function (event) {
+        var _this = this;
+        var val = this.modal.confirm()
             .size('sm')
             .showClose(true)
             .title("Waring Message")
             .body('Do you what Delete Record?')
-            .open().then(dialog => dialog.result)
-            .then(result => this.searchAndRemove(event))
-            .catch(err => console.info("Cancel...."));
-    }
-    searchAndRemove(obj) {
-        this.service.deletestock(obj.stockid).subscribe(res => this.updatetableModel(this.stockEntryForm));
-    }
-    onReset() {
+            .open().then(function (dialog) { return dialog.result; })
+            .then(function (result) { return _this.searchAndRemove(event); })
+            .catch(function (err) { return console.info("Cancel...."); });
+    };
+    StockEntryComponent.prototype.searchAndRemove = function (obj) {
+        var _this = this;
+        this.service.deletestock(obj.stockid).subscribe(function (res) { return _this.updatetableModel(_this.stockEntryForm); });
+    };
+    StockEntryComponent.prototype.onReset = function () {
         this.ngOnInit();
         this.errorMsg = '';
-    }
-};
-StockEntryComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        templateUrl: 'stockentry.component.html',
-        providers: [itemmaster_service_1.ItemMasterService]
-    }), 
-    __metadata('design:paramtypes', [service_menubar_1.MenuBarService, forms_1.FormBuilder, itemmaster_service_1.ItemMasterService, core_1.ViewContainerRef, bootstrap_1.Modal])
-], StockEntryComponent);
+    };
+    StockEntryComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            templateUrl: 'stockentry.component.html',
+            providers: [itemmaster_service_1.ItemMasterService]
+        }), 
+        __metadata('design:paramtypes', [service_menubar_1.MenuBarService, forms_1.FormBuilder, itemmaster_service_1.ItemMasterService, core_1.ViewContainerRef, bootstrap_1.Modal])
+    ], StockEntryComponent);
+    return StockEntryComponent;
+}());
 exports.StockEntryComponent = StockEntryComponent;
 //# sourceMappingURL=stockentry.component.js.map

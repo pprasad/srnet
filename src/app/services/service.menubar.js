@@ -8,15 +8,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-const core_1 = require('@angular/core');
-const router_1 = require('@angular/router');
-let MenuBarService = class MenuBarService {
-    constructor(router) {
+var core_1 = require('@angular/core');
+var router_1 = require('@angular/router');
+var MenuBarService = (function () {
+    function MenuBarService(router) {
         this.router = router;
         this.showNavBar = new core_1.EventEmitter();
     }
-    routeIsChanging(showmenu) {
-        let isAuth = localStorage.getItem('profile');
+    MenuBarService.prototype.routeIsChanging = function (showmenu) {
+        var isAuth = localStorage.getItem('profile');
         if (isAuth != null) {
             this.showNavBar.emit(showmenu);
         }
@@ -24,19 +24,20 @@ let MenuBarService = class MenuBarService {
             this.showNavBar.emit(false);
             this.router.navigateByUrl('/');
         }
-    }
-    onRouteChanged() {
+    };
+    MenuBarService.prototype.onRouteChanged = function () {
         return this.showNavBar;
-    }
-    removeProfile() {
+    };
+    MenuBarService.prototype.removeProfile = function () {
         localStorage.removeItem('profile');
         this.showNavBar.emit(false);
         this.router.navigateByUrl('/');
-    }
-};
-MenuBarService = __decorate([
-    core_1.Injectable(), 
-    __metadata('design:paramtypes', [router_1.Router])
-], MenuBarService);
+    };
+    MenuBarService = __decorate([
+        core_1.Injectable(), 
+        __metadata('design:paramtypes', [router_1.Router])
+    ], MenuBarService);
+    return MenuBarService;
+}());
 exports.MenuBarService = MenuBarService;
 //# sourceMappingURL=service.menubar.js.map
