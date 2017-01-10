@@ -2,7 +2,8 @@ import {Component,ViewEncapsulation,Input,Output,OnChanges,ElementRef,EventEmitt
 @Component({
     selector:'print-page',
     encapsulation:ViewEncapsulation.None,
-    template:'<button type="button" (click)="printDiv()" class="btn btn-primary">Print</button>'
+    template:'<button type="button" (click)="printDiv()" class="btn btn-primary">Print</button>',
+    styles:['h3{color:}']
 
 })
 export class PrintComponent{
@@ -15,20 +16,21 @@ export class PrintComponent{
         printContents+="<center>Beside Andhra Bank,Kothur,Padalakur Road,Nellore-524004</center>";
         printContents+="</div>";
         printContents+="<div class=\"modal-body\">";
-        printContents+="<table><tbody>";
-        printContents+="<tr><td><label>Invoice</label></td><td>:</td><td>"+obj.billno+"</td></tr>";
-        printContents+="<tr><td><label>Invoice Date</label></td><td>:</td><td>"+obj.billdate+"<td></tr>";
-        printContents+="<tr><td><label>CustomerName</label></td><td>:</td><td>"+obj.custname+"</td></tr>";
-        printContents+="</tbody></table>";
-        printContents+="<div class=\"table-responsive\">";
+        printContents+="<div class=\"panel-body\"><div class=\"row\">";
+        printContents+="<div class=\"col-xs-2\"><strong>Invoice</strong></div><div class=\"col-xs-6\">"+obj.billno+"</div></div>";
+        printContents+="<div class=\"row\"><div class=\"col-xs-2\"><strong>Invoice Date</strong></div><div class=\"col-xs-6\">"+obj.billdate+"</div></div>";
+        printContents+="<div class=\"row\"><div class=\"col-xs-2\"><strong>CustomerName</strong></div><div class=\"col-xs-6\">"+obj.custname+"</div></div>";
+        printContents+="</div>";
+        printContents+="<div class=\"row\"><div class=\"col-md-12\">";
+        printContents+="<div class=\"panel-body\"><div class=\"table-responsive\">";
         printContents+="<table class=\"table table-condense\">";
-        printContents+="<thead>";
-        printContents+="<tr  class=\"bg-primary\">";
-        printContents+="<th>Srno</th>";
-        printContents+="<th>Name</th>";
-        printContents+="<th>Quatity</th>";
-        printContents+="<th>Unit Cost</th>";
-        printContents+="<th>Total</th>";
+        printContents+="<thead class=\"tableheader\">";
+        printContents+="<tr>";
+        printContents+="<td>Srno</td>";
+        printContents+="<td>Name</td>";
+        printContents+="<td class=\"text-center\">Quatity</td>";
+        printContents+="<td class=\"text-center\">Unit Cost</td>";
+        printContents+="<td class=\"text-right\">Total</td>";
         printContents+="</tr>";
         printContents+="</thead>";
         printContents+="<tbody>";
@@ -36,23 +38,24 @@ export class PrintComponent{
             printContents+="<tr>";
             printContents+="<td>"+(parseInt(index)+1)+"</td>";
             printContents+="<td>"+obj.stocksoild[index].itemname+"</td>";
-            printContents+="<td>"+obj.stocksoild[index].qty+"</td>";
-            printContents+="<td>"+obj.stocksoild[index].rate+"</td>";
-            printContents+="<td>"+obj.stocksoild[index].amount+"</td>";
+            printContents+="<td class=\"text-center\">"+obj.stocksoild[index].qty+"</td>";
+            printContents+="<td class=\"text-center\">"+obj.stocksoild[index].rate+"</td>";
+            printContents+="<td class=\"text-right\">"+obj.stocksoild[index].amount+"</td>";
             printContents+="</tr>";
         }
         printContents+="</tbody>";
         printContents+="<tfoot>";
         printContents+="<tr>";
-        printContents+="<td></td>";
-        printContents+="<td></td>";
-        printContents+="<td></td>";
-        printContents+="<td>Grand Total:</td>";
-        printContents+="<td>"+obj.totalamt+"</td>";
+        printContents+="<td class=\"thick-line\"></td>";
+        printContents+="<td class=\"thick-line\"></td>";
+        printContents+="<td class=\"thick-line\"></td>";
+        printContents+="<td class=\"thick-line text-right\"><label>Grand Total</label></td>";
+        printContents+="<td class=\"thick-line text-right\">"+obj.totalamt+"</td>";
         printContents+="</tr>";
         printContents+="</tfoot>";
         printContents+="</table>";
-        printContents+="</div>";
+        printContents+="</div></div></div></div>";
+        printContents+="<div class=\"panel-body\"><div class=\"row\"><div class=\"col-xs-12 text-right\">Signature</div></div>";
         printContents+="</div>";
         if(window){
             if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {

@@ -306,10 +306,13 @@ input:-webkit-autofill {
   float:right;
   cursor:pointer;  
 }
-@media print {
-  * {
-    color: #000 !important;
-    text-shadow: none !important;
-    background: transparent !important;
-    box-shadow: none !important;
-  }
+.tableheader>tr>td{
+  border-bottom: 2px solid;
+  font-weight:bold;
+  background-color:#245580 !important;
+  color: #fff !important;
+  font-size:14px !important;
+}
+.table > tfoot > tr > .thick-line {
+    border-top: 2px solid;
+}
