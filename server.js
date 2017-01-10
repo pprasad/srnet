@@ -324,22 +324,45 @@ app.post('/api/save/custbillinfo',function(req,res){
     var obj=req.body;
     var sql="INSERT INTO CUSTOMER_BILL VALUES(?,?,?,?)";
     var params=[obj.billno,dateFormat(obj.billdate,app.get('sql.date')),obj.custid,obj.totalamt];
-    global.client.query(sql,params,function(err,rows){
-           if(err) res.send(err);
-           else{
-               var soildObjs=obj.stocksoild;
-               sql="INSERT INTO STOCK_SOILD(BILL_NO,ITEM_CODE,QTY,RATE,AMOUNT) VALUES(?,?,?,?,?)";
-               for(var index in soildObjs){
-                    var soild=soildObjs[index];   
-                    params=[obj.billno,soild.itemcode,soild.qty,soild.rate,soild.amount];
-                    global.client.query(sql,params,function(err,rows){
-                        if(err)res.send(err);console.info(err);
-                    });
-               }
-               res.send("Successfully Saved");
-           }
-    });
+    if(obj.billno==''||obj.billno==null){
+            global.client.query(sql,params,function(err,rows){
+                if(err) res.send(err);
+                else{
+                    var soildObjs=obj.stocksoild;
+                    sql="INSERT INTO STOCK_SOILD(BILL_NO,ITEM_CODE,QTY,RATE,AMOUNT) VALUES(?,?,?,?,?)";
+                    for(var index in soildObjs){
+                            var soild=soildObjs[index];   
+                            params=[obj.billno,soild.itemcode,soild.qty,soild.rate,soild.amount];
+                            global.client.query(sql,params,function(err,rows){
+                                if(err)res.send(err);console.info(err);
+                            });
+                    }
+                    res.send("Successfully Saved");
+                }
+            });
+    }else{
+          updateCustomerBill(obj,res);
+    }
 })
+var updateCustomerBill=function(obj,res){
+    var sql="UPDATE CUSTOMER_BILL SET BILL_DATE=?,TOTAL_AMT=? WHERE BILL_NO=?";
+    var params=[dateFormat(obj.billdate,app.get('sql.date')),obj.totalamt,obj.billno];
+    global.client.query(sql,params,function(err,rows){
+                if(err) res.send(err);
+                else{
+                    var soildObjs=obj.stocksoild;
+                    sql="UPDATE STOCK_SOILD SET ITEM_CODE=?,QTY=?,RATE=?,AMOUNT=? WHERE BILL_NO=? AND SOILD_ID=?";
+                    for(var index in soildObjs){
+                            var soild=soildObjs[index];   
+                            params=[soild.itemcode,soild.qty,soild.rate,soild.amount,obj.billno,soild.id];
+                            global.client.query(sql,params,function(err,rows){
+                                if(err)res.send(err);console.info(err);
+                            });
+                    }
+                    res.send("Successfully Updated");
+                }
+    });
+}
 /*get existing billing information*/
 app.get('/api/getbilldetails',function(req,res){
     var billinfos={};
