@@ -15,13 +15,12 @@ export class PrintComponent{
         printContents+="<center>Beside Andhra Bank,Kothur,Padalakur Road,Nellore-524004</center>";
         printContents+="</div>";
         printContents+="<div class=\"modal-body\">";
-        printContents+="<div class=\"row\">";
-        printContents+="<div class=\"col-xs-4 col-md-5 heading\">Invoice#<label>"+obj.billno+"</label></div>";
-        printContents+="<div class=\"col-xs-4 col-md-5 heading\">Invoice Date#<label>"+obj.billdate+"</label></div>";
-        printContents+="</div>";
-        printContents+="<div class=\"row\">";
-        printContents+="<div class=\"col-xs-4 col-md-5 heading\">CustomerName <label>"+obj.custname+"</label></div>";
-        printContents+="</div>";
+        printContents+="<table><tbody>";
+        printContents+="<tr><td><label>Invoice</label></td><td>:</td><td>"+obj.billno+"</td></tr>";
+        printContents+="<tr><td><label>Invoice Date</label></td><td>:</td><td>"+obj.billdate+"<td></tr>";
+        printContents+="<tr><td><label>CustomerName</label></td><td>:</td><td>"+obj.custname+"</td></tr>";
+        printContents+="</tbody></table>";
+        printContents+="<div class=\"table-responsive\">";
         printContents+="<table class=\"table table-condense\">";
         printContents+="<thead>";
         printContents+="<tr  class=\"bg-primary\">";
@@ -35,7 +34,7 @@ export class PrintComponent{
         printContents+="<tbody>";
         for(let index in obj.stocksoild){
             printContents+="<tr>";
-            printContents+="<td>"+(index+1)+"</td>";
+            printContents+="<td>"+(parseInt(index)+1)+"</td>";
             printContents+="<td>"+obj.stocksoild[index].itemname+"</td>";
             printContents+="<td>"+obj.stocksoild[index].qty+"</td>";
             printContents+="<td>"+obj.stocksoild[index].rate+"</td>";
@@ -54,17 +53,18 @@ export class PrintComponent{
         printContents+="</tfoot>";
         printContents+="</table>";
         printContents+="</div>";
+        printContents+="</div>";
         if(window){
             if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
-                var popup = window.open('', '_blank', 
-                'width=600,height=600,scrollbars=no,menubar=no,toolbar=no,'
+                var popup = window.open('', '_blank','width=600,height=600,scrollbars=no,menubar=no,toolbar=no,'
                 +'location=no,status=no,titlebar=no');
-                popup.window.focus();
-                popup.document.write('<!DOCTYPE html><html><head>  '
-        +'<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"'
+                popup.window.open();
+                popup.document.write('<html><head>  '
+        +'<link rel="stylesheet" type="text/css"  href="node_modules/bootstrap/dist/css/bootstrap.css"'
         +'media="screen,print">'
-        +'<link rel="stylesheet" href="app/styles/styles.css" media="screen,print">'             
-        +    '</head><body onload="window.print()"><div class="reward-body">' 
+        +'<link rel="stylesheet" type="text/css"  href="app/styles/styles.css" media="screen,print">'        
+        +    '</head><body onload="window.print()">'
+        +'<div class="reward-body">' 
         + printContents +'</div></html>');
                 popup.onbeforeunload = function (event) {           
                     popup.close();          
@@ -80,7 +80,7 @@ export class PrintComponent{
                 popup.document.write('<html><head>'+
         +'<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"'
         +' media="all">'
-        +'<link rel="stylesheet" href="style.css" media="all">'                
+        +'<link rel="stylesheet" href="app/styles/styles.css" media="all">'                
         +'</head><body onload="window.print()">' + printContents + '</html>');
                 popup.document.close();
             }
@@ -90,15 +90,4 @@ export class PrintComponent{
             return true;
         
     }
-    /*Styless*/
-    fetchStylesheets(){
-        var output:string= '';
-        for(var i=0;i<document.styleSheets.length;i++){
-        output = output +' <link rel="stylesheet" type="text/css" href="'+    
-                    window.document.styleSheets[0].href +'" /> ';
-        }
-        return output;
-    }
-    /*End Styles*/
-
 }

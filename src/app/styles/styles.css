@@ -306,3 +306,10 @@ input:-webkit-autofill {
   float:right;
   cursor:pointer;  
 }
+@media print {
+  * {
+    color: #000 !important;
+    text-shadow: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }

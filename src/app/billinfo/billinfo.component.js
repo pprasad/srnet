@@ -104,7 +104,7 @@ var BillinfoComponent = (function () {
         var billno = this.billEntryForm.value.billno;
         var obj = this.billEntryForm;
         this.billService.getbillinfo(billno).subscribe(function (res) {
-            obj.patchValue({ billdate: res.billdate, custid: res.custid, stocksoild: res.stocksoild, totalamt: res.totalamt });
+            obj.patchValue({ billdate: res.billdate, custid: res.custid, stocksoild: res.stocksoild, totalamt: res.totalamt, custname: res.custname });
             _this.rows = res.stocksoild;
         });
     };

@@ -344,12 +344,13 @@ app.post('/api/save/custbillinfo',function(req,res){
 app.get('/api/getbilldetails',function(req,res){
     var billinfos={};
     billinfos.stocksoild=[];
-    var sql="SELECT * FROM CUSTOMER_BILL WHERE BILL_NO=?";
+    var sql="SELECT * FROM CUSTOMER_BILL CB JOIN USER_INFO UINFO ON UINFO.USER_ID=CB.CUST_ID WHERE CB.BILL_NO=?";
     var params=[req.query.billno];
     global.client.query(sql,params,function(err,rows){
            billinfos.billno=rows[0].BILL_NO;
            billinfos.billdate=dateFormat(rows[0].BILL_DATE,"mm/dd/yyyy");
            billinfos.custid=rows[0].CUST_ID;
+           billinfos.custname=rows[0].SUR_NAME+rows[0].FIRST_NAME;
            billinfos.totalamt=rows[0].TOTAL_AMT;
            sql="SELECT * FROM STOCK_SOILD ST JOIN ITEM_MASTER ITM ON  ITM.ITEM_CODE=ST.ITEM_CODE WHERE ST.BILL_NO=?";
            global.client.query(sql,params,function(err,rows){
